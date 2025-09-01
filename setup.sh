@@ -1,0 +1,58 @@
+#!/bin/bash
+
+set -eu -o pipefail # fail on error and report it, debug all lines
+
+# Set up the shell variables for colors
+# http://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
+yellow=$(tput setaf 3)
+green=$(tput setaf 2)
+clear=$(tput sgr0)
+
+echo "${green}Update/Upgrade system...${clear}"
+sudo apt update && sudo apt dist-upgrade -y
+
+echo "${green}Installing Build Essential and more...${clear}"
+sudo apt install build-essential curl wget git zsh keychain yadm ripgrep glances ca-certificates -y
+
+echo "${green}Installing Archive Utilities...${clear}"
+sudo apt install rar unrar p7zip-full p7zip-rar unzip -y
+echo "${green}Installing rustup, lsd and bob...${clear}"
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+cargo install --git https://github.com/lsd-rs/lsd.git --branch master
+cargo install --git https://github.com/MordechaiHadad/bob.git
+
+echo "${green}Installing Homebrew/Linuxbrew...${clear}"
+curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+
+echo "${green}Installing docker...${clear}"
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |
+  sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+echo "${green}ZSH setup...${clear}"
+curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+[ -f ~/.zshrc ] && mv ~/.zshrc ~/zshrc.bak
+sudo chsh -s "$(which zsh)" "${USER}"
+
+echo "${green}Setup ssh keygen...${clear}"
+echo "Email:"
+read -r email
+ssh-keygen -t ed25519 -C "${email}"
+echo "${green}Copy the ssh key below and add to Github/Bitbucket account${clear}"
+echo "$(<$HOME/.ssh/id_ed25519.pub)"
+
+echo "${green}Press [SPACE] to continue...${clear}"
+read -r -s -d ' '
+
+echo "${green}Creating work directory...${clear}"
+mkdir -p "${HOME}/Work"
+
+echo "${green}DONE!🚀🚀${clear}"
