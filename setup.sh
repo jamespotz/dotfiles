@@ -22,8 +22,14 @@ source $HOME/.cargo/env
 cargo install --git https://github.com/lsd-rs/lsd.git --branch master
 cargo install --git https://github.com/MordechaiHadad/bob.git
 
-echo "${green}Installing Homebrew/Linuxbrew...${clear}"
-curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+echo "${green}Installing mise...${clear}"
+curl https://mise.run | sh
+
+echo "${green}Installing mcfly...${clear}"
+curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh | sudo sh -s -- --git cantino/mcfly
+
+echo "${green}Installing starship...${clear}"
+curl -sS https://starship.rs/install.sh | sh
 
 echo "${green}Installing docker...${clear}"
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
@@ -54,5 +60,8 @@ read -r -s -d ' '
 
 echo "${green}Creating work directory...${clear}"
 mkdir -p "${HOME}/Work"
+
+echo "${green}Cloning config...${clear}"
+yadm clone git@github.com:jamespotz/config.git
 
 echo "${green}DONE!🚀🚀${clear}"

@@ -64,6 +64,9 @@ function fix_zsh_history() {
   echo "Done 🚀"
 }
 
+# Mise
+eval "$(mise activate zsh)"
+
 # Autojump
 eval "$(zoxide init zsh)"
 
