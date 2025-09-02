@@ -1,5 +1,6 @@
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+eval "$(mise activate zsh)"
+eval "$(mise hook-env)"
 autoload -Uz compinit
 compinit -i
 source ~/.zplug/init.zsh
@@ -37,11 +38,12 @@ SAVEHIST="$HISTSIZE"
 setopt hist_ignore_space # ignore space
 setopt hist_ignore_all_dups # remove older duplicate entries from history
 setopt hist_reduce_blanks # remove superfluous blanks from history items
+setopt auto_list # automatically list choices on ambiguous completion
 setopt inc_append_history # save history entries as soon as they are entered
 setopt share_history # share history between different instances of the shell
-setopt auto_cd # cd by typing directory name if it's not a command
 setopt correct_all # autocorrect commands
-setopt auto_list # automatically list choices on ambiguous completion
+setopt auto_cd # cd by typing directory name if it's not a command
+  # Mise
 setopt auto_menu # automatically use menu completion
 setopt always_to_end # move cursor to end if word had one match
 
@@ -64,8 +66,6 @@ function fix_zsh_history() {
   echo "Done 🚀"
 }
 
-# Mise
-eval "$(mise activate zsh)"
 
 # Autojump
 eval "$(zoxide init zsh)"
@@ -118,6 +118,10 @@ fi
 
 if command -v lazydocker &>/dev/null; then
   alias lzd="lazydocker"
+fi
+
+if command -v eza &>/dev/null; then
+  alias ls="eza -l --icons"
 fi
 
 alias myip="curl http://ipecho.net/plain; echo"
