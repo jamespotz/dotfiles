@@ -1,28 +1,54 @@
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-eval "$(mise activate zsh)"
-eval "$(mise hook-env)"
+LC_CTYPE=en_US.UTF-8
+LC_ALL=en_US.UTF-8
 autoload -Uz compinit
 compinit -i
-source ~/.zplug/init.zsh
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug "plugins/git-extras",   from:oh-my-zsh
-zplug "plugins/zoxide",   from:oh-my-zsh
-zplug "plugins/command-not-found",   from:oh-my-zsh
-zplug "plugins/colored-man-pages",   from:oh-my-zsh
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-autosuggestions"
-zplug "wfxr/forgit"
 
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
+if [[ -e /etc/arch-release ]]; then
+  source /usr/share/zsh-antidote/antidote.zsh
+  # Set the root name of the plugins files (.txt and .zsh) antidote will use.
+  zsh_plugins=${ZDOTDIR:-~}/.zsh_plugins
+
+  # Ensure the .zsh_plugins.txt file exists so you can add plugins.
+  [[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
+
+  # Lazy-load antidote from its functions directory.
+  fpath=(/usr/share/zsh-antidote/functions $fpath)
+  autoload -Uz antidote
+
+  # Generate a new static file whenever .zsh_plugins.txt is updated.
+  if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
+    antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
+  fi
+
+  # Source your static plugins file.
+  source ${zsh_plugins}.zsh
+else
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  eval "$(mise activate zsh)"
+  eval "$(mise hook-env)"
+	source ~/.zplug/init.zsh
+	zplug "zsh-users/zsh-syntax-highlighting", defer:2
+	zplug "plugins/git-extras",   from:oh-my-zsh
+	zplug "plugins/zoxide",   from:oh-my-zsh
+	zplug "plugins/command-not-found",   from:oh-my-zsh
+	zplug "plugins/colored-man-pages",   from:oh-my-zsh
+	zplug "zsh-users/zsh-completions"
+	zplug "zsh-users/zsh-autosuggestions"
+	zplug "wfxr/forgit"
+
+	# Install plugins if there are plugins that have not been installed
+	if ! zplug check --verbose; then
+	printf "Install? [y/N]: "
+	if read -q; then
+		echo; zplug install
+	fi
+	fi
+
+
+	# Then, source plugins and add commands to $PATH
+	zplug load #--verbose
 fi
 
-# Then, source plugins and add commands to $PATH
-zplug load #--verbose
 
 # Keychain
 if command -v /usr/bin/keychain &> /dev/null; then
@@ -72,6 +98,9 @@ eval "$(zoxide init zsh)"
 
 # McFly
 eval "$(mcfly init zsh)"
+
+# FNM
+eval "$(fnm env --use-on-cd --shell zsh)"
 
 LS_COLORS="dircolors"
 
