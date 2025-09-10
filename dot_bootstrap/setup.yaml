@@ -1,0 +1,79 @@
+- name: Setup ArchLinux
+  hosts: localhost
+  become: true
+  connection: local
+  gather_facts: true
+
+  tasks:
+    - name: Get my user
+      ansible.builtin.set_fact:
+        remove_regular_user: "{{ ansible_env.SUDO_USER or ansible_user_id }}"
+
+    - name: Update pacman database
+      community.general.pacman:
+        update_cache: yes
+
+    - name: Install packages
+      community.general.pacman:
+        name:
+          - base-devel
+          - pkgconf
+          - cmake
+          - ninja
+          - gdb
+          - lldb
+          - git
+          - git-delta
+          - neovim
+          - docker
+          - docker-compose
+          - fzf
+          - lazydocker
+          - lazygit
+          - starship
+          - eza
+          - ripgrep
+          - btop
+          - bat
+        state: present
+
+    - name: Install yay from AUR if missing
+      become_user: "{{ remove_regular_user }}"
+      ansible.builtin.shell: |
+        if ! command -v yay >/dev/null; then
+          git clone https://aur.archlinux.org/yay.git /tmp/yay
+          cd /tmp/yay && makepkg -si --noconfirm
+        fi
+      args:
+        creates: /usr/bin/yay
+
+    - name: Install AUR packages with yay
+      become_user: "{{ remove_regular_user }}"
+      ansible.builtin.shell: yay -S --noconfirm mcfly fnm starship zoxide fd zsh-antidote wezterm
+
+    - name: Detect zsh binary path
+      ansible.builtin.shell: command -v zsh || true
+      register: zsh_path
+      changed_when: false
+
+    - name: Ensure detected zsh path is in /etc/shells
+      ansible.builtin.lineinfile:
+        path: /etc/shells
+        line: "{{ zsh_path.stdout }}"
+        state: present
+
+    - name: Change default shell to detected zsh for that user
+      ansible.builtin.user:
+        name: "{{ remove_regular_user }}"
+        shell: "{{ zsh_path.stdout }}"
+
+    - name: Add Docker group
+      ansible.builtin.group:
+        name: docker
+        state: present
+
+    - name: Add user to docker group
+      ansible.builtin.user:
+        name: "{{ remove_regular_user }}"
+        groups: docker
+        append: true

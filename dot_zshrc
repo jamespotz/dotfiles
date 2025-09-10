@@ -177,3 +177,10 @@ fi
 if [ -z "$TMUX" ]; then
   [[ "$-" == *i* ]] && printf 'P$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "zsh", "uname": "Linux" }}œ' 
 fi
+
+export EDITOR="nvim"
+
+# Wezterm integration script
+if [ -f "/etc/profile.d/wezterm.sh" ]; then
+  source "/etc/profile.d/wezterm.sh"
+fi
