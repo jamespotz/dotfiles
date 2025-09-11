@@ -7,6 +7,15 @@
     aur_user: "{{ aur_user }}"
 
   tasks:
+    - name: Ensure Ansible tmp dir exists for {{ aur_user }}
+      ansible.builtin.file:
+        path: "/home/{{ aur_user }}/.ansible/tmp"
+        state: directory
+        mode: '0700'
+        owner: "{{ aur_user }}"
+        group: "{{ aur_user }}"
+      become: yes
+      
     - name: Update pacman database
       community.general.pacman:
         update_cache: yes
@@ -53,6 +62,12 @@
         content: "{{ aur_user }} ALL=(ALL) NOPASSWD: /usr/bin/pacman\n"
         mode: "0440"
       become: yes
+
+    - name: Ensure yay is installed
+      become_user: "{{ aur_user }}"
+      kewlfft.aur.aur:
+        name: yay
+        state: present
 
     - name: Install AUR packages
       become_user: "{{ aur_user }}"
