@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # Uncomment en_US.UTF-8 in /etc/locale.gen
-sed -i 's/^#en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
-locale-gen
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
+sudo sed -i 's/^#en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
+sudo locale-gen
+echo "LANG=en_US.UTF-8" >/etc/locale.conf
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
