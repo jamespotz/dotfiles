@@ -11,6 +11,18 @@
       community.general.pacman:
         update_cache: yes
 
+    - name: Install reflector to refresh mirrors
+      community.general.pacman:
+        name: reflector
+        state: present
+    
+    - name: Update pacman mirrors (fastest in Asia)
+      ansible.builtin.command: >
+        reflector --country 'Philippines','Singapore','Japan'
+                  --latest 10 --protocol https --sort rate
+                  --save /etc/pacman.d/mirrorlist
+      become: yes
+
     - name: Install packages
       community.general.pacman:
         name:
