@@ -9,16 +9,16 @@ read -srp "Enter password for $NEW_USER: " NEW_PASS
 echo
 
 # Install sudo and shadow
-sudo pacman -Sy --needed --noconfirm sudo shadow
+pacman -Sy --needed --noconfirm sudo shadow
 
 # Make sure wheel group exists
 if ! getent group wheel >/dev/null; then
-  sudo groupadd wheel
+  groupadd wheel
 fi
 
 # Create user if missing
 if ! id "$NEW_USER" >/dev/null 2>&1; then
-  sudo useradd -m -G wheel -s /bin/bash "$NEW_USER"
+  useradd -m -G wheel -s /bin/bash "$NEW_USER"
 fi
 
 # Set password
