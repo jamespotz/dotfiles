@@ -40,13 +40,5 @@ echo "$NEW_USER:$NEW_PASS" | chpasswd
 # --- SUDOERS CONFIGURATION ---
 echo "Enabling 'wheel' group for sudo access..."
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
-
-# --- AUTOMATIC LOGIN ---
-# Switch to the new user's shell. The 'exec' command replaces the current shell
-# process with a new one, so when you exit the new user shell, the terminal will close.
-echo "Setup complete. Logging in as user '$NEW_USER'..."
-echo "You can exit this session by typing 'exit' or pressing Ctrl+D."
-exec su -l "$NEW_USER"
-
-# --- FINAL STEP: RUN chezmoi ---
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply $NEW_USER
+echo "Setup is now complete. Please exit the terminal and restart Arch Linux."
+echo "Then, log in as the new user and run the 'chezmoi' command."
