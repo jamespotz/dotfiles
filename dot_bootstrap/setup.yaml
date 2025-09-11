@@ -37,19 +37,21 @@
           - bat
         state: present
 
-    - name: Install yay from AUR if missing
+    - name: Install AUR packages
       become_user: "{{ remove_regular_user }}"
-      ansible.builtin.shell: |
-        if ! command -v yay >/dev/null; then
-          git clone https://aur.archlinux.org/yay.git /tmp/yay
-          cd /tmp/yay && makepkg -si --noconfirm
-        fi
-      args:
-        creates: /usr/bin/yay
-
-    - name: Install AUR packages with yay
-      become_user: "{{ remove_regular_user }}"
-      ansible.builtin.shell: yay -S --noconfirm mcfly fnm starship zoxide fd zsh-antidote wezterm
+      kewlfft.aur.aur:
+        name:
+          - fnm
+          - mcfly
+          - zoxide
+          - wezterm
+          - fd
+          - zsh-antidote
+          - mesa
+          - vulkan-dzn
+          - vulkan-icd-loader
+        state: present
+        use: yay
 
     - name: Detect zsh binary path
       ansible.builtin.shell: command -v zsh || true

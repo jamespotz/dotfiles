@@ -9,7 +9,7 @@ fi
 
 # 2. Install required Ansible collections
 echo "Installing required Ansible collections..."
-ansible-galaxy collection install community.general --force
+ansible-galaxy collection install community.general kewlfft.aur --force
 
 # 3. Run the playbook locally
 echo "Running playbook"
