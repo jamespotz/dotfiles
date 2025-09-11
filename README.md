@@ -21,6 +21,13 @@ To automatically log into this new user when opening the Arch Linux WSL session,
 Arch.exe config --default-user username
 ```
 
+Or edit `/etc/wsl.conf`
+
+```
+[user]
+default=username
+```
+
 ## How to run
 
 ```shell
