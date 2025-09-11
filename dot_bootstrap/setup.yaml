@@ -3,19 +3,12 @@
   become: true
   connection: local
   gather_facts: true
-  vars:
-    aur_user: "{{ aur_user }}"
 
   tasks:
-    - name: Ensure Ansible tmp dir exists for {{ aur_user }}
-      ansible.builtin.file:
-        path: "/home/{{ aur_user }}/.ansible/tmp"
-        state: directory
-        mode: '0700'
-        owner: "{{ aur_user }}"
-        group: "{{ aur_user }}"
-      become: yes
-      
+    - name: Get my user
+      ansible.builtin.set_fact:
+        remote_regular_user: "{{ ansible_env.SUDO_USER or ansible_user_id }}"
+        
     - name: Update pacman database
       community.general.pacman:
         update_cache: yes
@@ -55,14 +48,7 @@
           - btop
           - bat
         state: present
-
-    - name: Allow {{ aur_user }} to run pacman without password
-      ansible.builtin.copy:
-        dest: "/etc/sudoers.d/{{ aur_user }}-pacman"
-        content: "{{ aur_user }} ALL=(ALL) NOPASSWD: /usr/bin/pacman\n"
-        mode: "0440"
-      become: yes
-
+        
     - name: Ensure yay is installed
       become_user: "{{ aur_user }}"
       kewlfft.aur.aur:
@@ -70,7 +56,7 @@
         state: present
 
     - name: Install AUR packages
-      become_user: "{{ aur_user }}"
+      become_user: "{{ remote_regular_user }}"
       kewlfft.aur.aur:
         name:
           - fnm
@@ -109,11 +95,6 @@
 
     - name: Add user to docker group
       ansible.builtin.user:
-        name: "{{ aur_user }}"
+        name: "{{ remote_regular_user }}"
         groups: docker
         append: true
-
-    - name: Remove temporary passwordless sudo file
-      ansible.builtin.file:
-        path: "/etc/sudoers.d/99-{{ aur_user }}"
-        state: absent
