@@ -7,7 +7,7 @@
   tasks:
     - name: Get my user
       ansible.builtin.set_fact:
-        remove_regular_user: "{{ ansible_env.SUDO_USER or ansible_user_id }}"
+        remote_regular_user: "{{ ansible_env.SUDO_USER or ansible_user_id }}"
 
     - name: Update pacman database
       community.general.pacman:
@@ -38,7 +38,7 @@
         state: present
 
     - name: Install AUR packages
-      become_user: "{{ remove_regular_user }}"
+      become_user: "{{ remote_regular_user }}"
       kewlfft.aur.aur:
         name:
           - fnm
@@ -50,6 +50,7 @@
           - mesa
           - vulkan-dzn
           - vulkan-icd-loader
+          - yay
         state: present
         use: yay
 
@@ -66,7 +67,7 @@
 
     - name: Change default shell to detected zsh for that user
       ansible.builtin.user:
-        name: "{{ remove_regular_user }}"
+        name: "{{ remote_regular_user }}"
         shell: "{{ zsh_path.stdout }}"
 
     - name: Add Docker group
@@ -76,6 +77,6 @@
 
     - name: Add user to docker group
       ansible.builtin.user:
-        name: "{{ remove_regular_user }}"
+        name: "{{ remote_regular_user }}"
         groups: docker
         append: true
