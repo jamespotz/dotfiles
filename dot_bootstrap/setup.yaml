@@ -3,12 +3,10 @@
   become: true
   connection: local
   gather_facts: true
+  vars:
+    aur_user: "{{ aur_user }}"
 
   tasks:
-    - name: Get my user
-      ansible.builtin.set_fact:
-        remote_regular_user: "{{ ansible_env.SUDO_USER or ansible_user_id }}"
-
     - name: Update pacman database
       community.general.pacman:
         update_cache: yes
@@ -37,8 +35,15 @@
           - bat
         state: present
 
+    - name: Allow {{ aur_user }} to run pacman without password
+      ansible.builtin.copy:
+        dest: "/etc/sudoers.d/{{ aur_user }}-pacman"
+        content: "{{ aur_user }} ALL=(ALL) NOPASSWD: /usr/bin/pacman\n"
+        mode: "0440"
+      become: yes
+
     - name: Install AUR packages
-      become_user: "{{ remote_regular_user }}"
+      become_user: "{{ aur_user }}"
       kewlfft.aur.aur:
         name:
           - fnm
@@ -67,7 +72,7 @@
 
     - name: Change default shell to detected zsh for that user
       ansible.builtin.user:
-        name: "{{ remote_regular_user }}"
+        name: "{{ aur_user }}"
         shell: "{{ zsh_path.stdout }}"
 
     - name: Add Docker group
@@ -77,6 +82,11 @@
 
     - name: Add user to docker group
       ansible.builtin.user:
-        name: "{{ remote_regular_user }}"
+        name: "{{ aur_user }}"
         groups: docker
         append: true
+
+    - name: Remove temporary passwordless sudo file
+      ansible.builtin.file:
+        path: "/etc/sudoers.d/99-{{ aur_user }}"
+        state: absent
