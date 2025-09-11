@@ -55,6 +55,12 @@
         name: yay
         state: present
 
+    - name: Allow pacman for {{ remote_regular_user }} without password
+      ansible.builtin.copy:
+        dest: "/etc/sudoers.d/{{ remote_regular_user }}-pacman"
+        content: "{{ remote_regular_user }} ALL=(ALL) NOPASSWD: /usr/bin/pacman\n"
+        mode: '0440'
+
     - name: Install AUR packages
       become_user: "{{ remote_regular_user }}"
       kewlfft.aur.aur:
@@ -98,3 +104,9 @@
         name: "{{ remote_regular_user }}"
         groups: docker
         append: true
+
+    - name: Remove temporary passwordless pacman sudoers
+      ansible.builtin.file:
+        path: "/etc/sudoers.d/{{ remote_regular_user }}-pacman"
+        state: absent
+        
