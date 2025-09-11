@@ -30,6 +30,15 @@ pacman-key --init
 pacman-key --populate archlinux
 pacman -Syu --noconfirm
 
+# --- FIX SYSTEM LANGUAGE (LOCALE) ---
+echo "Fixing system language settings (en_US.UTF-8)..."
+# Uncomment the desired locale in /etc/locale.gen
+sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+# Generate the locales based on the modified file
+locale-gen
+# Set the system-wide locale in /etc/locale.conf
+echo "LANG=en_US.UTF-8" | tee /etc/locale.conf 
+
 # --- USER CREATION AND SUDO SETUP ---
 echo "Installing sudo and creating new user: $NEW_USER"
 pacman -S sudo --noconfirm
