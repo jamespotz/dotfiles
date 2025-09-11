@@ -28,6 +28,12 @@ Or edit `/etc/wsl.conf`
 default=username
 ```
 
+## Or Automate it using this script
+
+```shell
+bash <(curl -s https://raw.githubusercontent.com/jamespotz/dotfiles/master/executable_setup-arch.sh)
+```
+
 ## How to run
 
 ```shell
