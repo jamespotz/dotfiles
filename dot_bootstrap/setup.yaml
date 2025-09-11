@@ -49,17 +49,17 @@
           - bat
         state: present
 
-    - name: Ensure yay is installed
-      become_user: "{{ remote_regular_user }}"
-      kewlfft.aur.aur:
-        name: yay
-        state: present
-
     - name: Allow pacman for {{ remote_regular_user }} without password
       ansible.builtin.copy:
         dest: "/etc/sudoers.d/{{ remote_regular_user }}-pacman"
         content: "{{ remote_regular_user }} ALL=(ALL) NOPASSWD: /usr/bin/pacman\n"
         mode: '0440'
+
+    - name: Ensure yay is installed
+      become_user: "{{ remote_regular_user }}"
+      kewlfft.aur.aur:
+        name: yay
+        state: present
 
     - name: Install AUR packages
       become_user: "{{ remote_regular_user }}"
