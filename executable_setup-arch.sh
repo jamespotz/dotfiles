@@ -49,5 +49,10 @@ echo "$NEW_USER:$NEW_PASS" | chpasswd
 # --- SUDOERS CONFIGURATION ---
 echo "Enabling 'wheel' group for sudo access..."
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+
+# --- SETTING DEFAULT USER IN WSL ---
+echo "Configuring /etc/wsl.conf to set the default user..."
+echo -e "[user]\ndefault=$NEW_USER" | tee /etc/wsl.conf > /dev/null
+
 echo "Setup is now complete. Please exit the terminal and restart Arch Linux."
 echo "Then, log in as the new user and run the 'chezmoi' command."
