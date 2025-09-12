@@ -27,6 +27,13 @@ $time\
 $cmd_duration\
 $line_break\n$character"""
 
+right_format = """
+[](fg:green)$status[](fg:green bg:teal)\
+[](fg:teal bg:sky)\
+[](fg:sky bg:sapphire)$memory_usage[](fg:sapphire)
+"""
+
+
 palette = 'catppuccin_mocha'
 
 [os]
@@ -164,7 +171,22 @@ disabled = false
 show_notifications = true
 min_time_to_notify = 45000
 
+[memory_usage]
+disabled = false
+threshold = -1
+style = "bg:sapphire"
+format = '[ 󰍛 ${ram_pct}](fg:crust bg:sapphire)($style)'
+
+[status]
+style = 'bg:green'
+symbol = '❌'
+success_symbol = '✔️'
+format = '[$symbol](fg:crust bg:green)($style)'
+map_symbol = true
+disabled = false
+
 [palettes.catppuccin_mocha]
+blue = "#89b4fa"
 rosewater = "#f5e0dc"
 flamingo = "#f2cdcd"
 pink = "#f5c2e7"
@@ -177,7 +199,6 @@ green = "#a6e3a1"
 teal = "#94e2d5"
 sky = "#89dceb"
 sapphire = "#74c7ec"
-blue = "#89b4fa"
 lavender = "#b4befe"
 text = "#cdd6f4"
 subtext1 = "#bac2de"
