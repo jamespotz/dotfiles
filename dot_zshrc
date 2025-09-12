@@ -47,7 +47,7 @@ fi
 
 # --- Prompt / title ---
 function set_win_title() {
-  echo -ne "\033]0; ¿ $USER:$PWD \007"
+  echo -ne "\033]0; \ueb44 $USER:$PWD \007"
 }
 precmd_functions+=(set_win_title)
 
@@ -58,7 +58,7 @@ function fix_zsh_history() {
   strings ~/.zsh_history_bad > ~/.zsh_history
   fc -R ~/.zsh_history
   rm ~/.zsh_history_bad
-  echo "Done ¿"
+  echo "Done \ueb44"
 }
 
 # --- Command tools & inits ---
