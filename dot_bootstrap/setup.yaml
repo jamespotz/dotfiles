@@ -4,10 +4,42 @@
   connection: local
   gather_facts: true
 
+  vars:
+    remote_regular_user: "{{ ansible_env.SUDO_USER or ansible_user_id }}"
+    aur_helper: yay
+    aur_packages:
+      - fnm
+      - mcfly
+      - zoxide
+      - wezterm
+      - fd
+      - zsh-antidote
+      - mesa
+      - vulkan-dzn
+      - vulkan-icd-loader
+    pacman_packages:
+      - base-devel
+      - pkgconf
+      - cmake
+      - ninja
+      - gdb
+      - lldb
+      - git
+      - git-delta
+      - neovim
+      - docker
+      - docker-compose
+      - fzf
+      - lazydocker
+      - lazygit
+      - starship
+      - eza
+      - ripgrep
+      - btop
+      - bat
+      - postgresql
+
   tasks:
-    - name: Get my user
-      ansible.builtin.set_fact:
-        remote_regular_user: "{{ ansible_env.SUDO_USER or ansible_user_id }}"
 
     - name: Update pacman database
       community.general.pacman:
@@ -23,60 +55,30 @@
         reflector --country 'Philippines','Singapore','Japan'
                   --latest 10 --protocol https --sort rate
                   --save /etc/pacman.d/mirrorlist
-      become: yes
 
-    - name: Install packages
+    - name: Install required pacman packages
       community.general.pacman:
-        name:
-          - base-devel
-          - pkgconf
-          - cmake
-          - ninja
-          - gdb
-          - lldb
-          - git
-          - git-delta
-          - neovim
-          - docker
-          - docker-compose
-          - fzf
-          - lazydocker
-          - lazygit
-          - starship
-          - eza
-          - ripgrep
-          - btop
-          - bat
+        name: "{{ pacman_packages }}"
         state: present
 
-    - name: Allow pacman for {{ remote_regular_user }} without password
+    - name: Temporarily allow pacman without password
       ansible.builtin.copy:
         dest: "/etc/sudoers.d/{{ remote_regular_user }}-pacman"
         content: "{{ remote_regular_user }} ALL=(ALL) NOPASSWD: /usr/bin/pacman\n"
         mode: '0440'
 
-    - name: Ensure yay is installed
+    - name: Ensure AUR helper (yay) is installed
       become_user: "{{ remote_regular_user }}"
       kewlfft.aur.aur:
-        name: yay
+        name: "{{ aur_helper }}"
         state: present
 
     - name: Install AUR packages
       become_user: "{{ remote_regular_user }}"
       kewlfft.aur.aur:
-        name:
-          - fnm
-          - mcfly
-          - zoxide
-          - wezterm
-          - fd
-          - zsh-antidote
-          - mesa
-          - vulkan-dzn
-          - vulkan-icd-loader
-          - yay
+        name: "{{ aur_packages }}"
         state: present
-        use: yay
+        use: "{{ aur_helper }}"
 
     - name: Detect zsh binary path
       ansible.builtin.shell: command -v zsh || true
@@ -105,8 +107,36 @@
         groups: docker
         append: true
 
+    - name: Enable and start Docker service
+      ansible.builtin.systemd:
+        name: docker
+        enabled: true
+        state: started
+
+    - name: Initialize PostgreSQL data directory if not already initialized
+      ansible.builtin.command: initdb --locale=en_US.UTF-8 -D /var/lib/postgres/data
+      become_user: postgres
+      args:
+        creates: /var/lib/postgres/data/PG_VERSION
+
+    - name: Enable and start PostgreSQL service
+      ansible.builtin.systemd:
+        name: postgresql
+        enabled: true
+        state: started
+
+    - name: Create PostgreSQL superuser matching local user
+      become_user: postgres
+      community.postgresql.postgresql_user:
+        name: "{{ remote_regular_user }}"
+        role_attr_flags: "SUPERUSER,CREATEDB,CREATEROLE,LOGIN"
+        password: ""
+
+    - name: Install Node v20.19
+      ansible.builtin.command: >
+        fnm install --use 20.19.0
+
     - name: Remove temporary passwordless pacman sudoers
       ansible.builtin.file:
         path: "/etc/sudoers.d/{{ remote_regular_user }}-pacman"
         state: absent
-        
