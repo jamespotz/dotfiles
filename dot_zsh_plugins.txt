@@ -7,3 +7,4 @@ ohmyzsh/ohmyzsh path:plugins/colored-man-pages
 zsh-users/zsh-completions
 zsh-users/zsh-autosuggestions
 wfxr/forgit
+jeffreytse/zsh-vi-mode
