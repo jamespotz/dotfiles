@@ -1,124 +1,108 @@
+# Environment
 export GALLIUM_DRIVER="d3d12"
 export LIBVA_DRIVER_NAME="d3d12"
+export NODE_OPTIONS="--max-old-space-size=8192"
+export EDITOR="nvim"
+LS_COLORS="dircolors"
 
+setopt prompt_subst
+setopt auto_menu               # automatically use menu completion
+setopt always_to_end           # move cursor to end if word had one match
+setopt auto_list               # automatically list choices on ambiguous completion
+autoload bashcompinit && bashcompinit
+# Completion styles
+zstyle ':completion:*' menu select            # select completions with arrow keys
+zstyle ':completion:*' group-name ''          # group results by category
+zstyle ':completion:*' completer _expand _complete _ignored _approximate
+# --- Completion & core autoloads ---
 autoload -Uz compinit
 compinit -i
 
-if [[ -e /etc/arch-release ]]; then
-  source /usr/share/zsh-antidote/antidote.zsh
-  # Set the root name of the plugins files (.txt and .zsh) antidote will use.
-  zsh_plugins=${ZDOTDIR:-~}/.zsh_plugins
+# Antidote (Arch)
+source /usr/share/zsh-antidote/antidote.zsh
 
-  # Ensure the .zsh_plugins.txt file exists so you can add plugins.
-  [[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
+# Set the root name of the plugins files (.txt and .zsh) antidote will use.
+zsh_plugins=${ZDOTDIR:-~}/.zsh_plugins
 
-  # Lazy-load antidote from its functions directory.
-  fpath=(/usr/share/zsh-antidote/functions $fpath)
-  autoload -Uz antidote
+# Ensure the .zsh_plugins.txt file exists so you can add plugins.
+[[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
 
-  # Generate a new static file whenever .zsh_plugins.txt is updated.
-  if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
-    antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
-  fi
+# Lazy-load antidote from its functions directory.
+fpath=(/usr/share/zsh-antidote/functions $fpath)
+autoload -Uz antidote
 
-  # Source your static plugins file.
-  source ${zsh_plugins}.zsh
-else
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  eval "$(mise activate zsh)"
-  eval "$(mise hook-env)"
-	source ~/.zplug/init.zsh
-	zplug "zsh-users/zsh-syntax-highlighting", defer:2
-	zplug "plugins/git-extras",   from:oh-my-zsh
-	zplug "plugins/zoxide",   from:oh-my-zsh
-	zplug "plugins/command-not-found",   from:oh-my-zsh
-	zplug "plugins/colored-man-pages",   from:oh-my-zsh
-	zplug "zsh-users/zsh-completions"
-	zplug "zsh-users/zsh-autosuggestions"
-	zplug "wfxr/forgit"
-
-	# Install plugins if there are plugins that have not been installed
-	if ! zplug check --verbose; then
-	printf "Install? [y/N]: "
-	if read -q; then
-		echo; zplug install
-	fi
-	fi
-
-
-	# Then, source plugins and add commands to $PATH
-	zplug load #--verbose
+# Generate a new static file whenever .zsh_plugins.txt is updated.
+if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
+  antidote bundle <${zsh_plugins}.txt >| ${zsh_plugins}.zsh
 fi
 
+# Source your static plugins file.
+source ${zsh_plugins}.zsh
 
-# Keychain
-if command -v /usr/bin/keychain &> /dev/null; then
-  /usr/bin/keychain -q --nogui $HOME/.ssh/id_ed25519
+# --- Keychain ---
+if command -v keychain &> /dev/null; then
+  command -v keychain &> /dev/null && keychain -q --nogui $HOME/.ssh/id_ed25519
   source $HOME/.keychain/$HOST-sh
 fi
 
-
-#History setup
-HISTFILE="$HOME/.zsh_history"
-HISTSIZE=100000
-SAVEHIST="$HISTSIZE"
-setopt hist_ignore_space # ignore space
-setopt hist_ignore_all_dups # remove older duplicate entries from history
-setopt hist_reduce_blanks # remove superfluous blanks from history items
-setopt auto_list # automatically list choices on ambiguous completion
-setopt inc_append_history # save history entries as soon as they are entered
-setopt share_history # share history between different instances of the shell
-setopt correct_all # autocorrect commands
-setopt auto_cd # cd by typing directory name if it's not a command
-  # Mise
-setopt auto_menu # automatically use menu completion
-setopt always_to_end # move cursor to end if word had one match
-
-zstyle ':completion:*' menu select # select completions with arrow keys
-zstyle ':completion:*' group-name '' # group results by category
-zstyle ':completion:::::' completer _expand _complete _ignored _approximate #enable approximate matches for completion
-
-function set_win_title(){
-    echo -ne "\033]0; ðŸš€ $USER:$PWD \007"
+# --- Prompt / title ---
+function set_win_title() {
+  echo -ne "\033]0; ¿ $USER:$PWD \007"
 }
 precmd_functions+=(set_win_title)
 
-# ZSH history corruption fix
+# --- Fix corrupt history helper ---
 function fix_zsh_history() {
   echo "Fixing corrupt .zsh_history file..."
   mv ~/.zsh_history ~/.zsh_history_bad
   strings ~/.zsh_history_bad > ~/.zsh_history
   fc -R ~/.zsh_history
   rm ~/.zsh_history_bad
-  echo "Done ðŸš€"
+  echo "Done ¿"
 }
 
-
-# Autojump
+# --- Command tools & inits ---
+# Autojump / zoxide
 eval "$(zoxide init zsh)"
 
-# McFly
-eval "$(mcfly init zsh)"
-
-# FNM
+# FNM (Fast Node Manager)
 eval "$(fnm env --use-on-cd --shell zsh)"
 
-LS_COLORS="dircolors"
-
-# wfxr/forgit ctrl-d to drop the selected stash but do not quit fzf (gss specific).
+# wfxr/forgit ctrl-d to drop selected stash but do not quit fzf (gss specific)
 FORGIT_STASH_FZF_OPTS='
 --bind="ctrl-d:reload(git stash drop $(cut -d: -f1 <<<{}) 1>/dev/null && git stash list)"
 '
 
-# Increase node js memory
-export NODE_OPTIONS="--max-old-space-size=8192"
+# Starship and Atuin
+eval "$(starship init zsh)"
+eval "$(atuin init zsh)"
 
-# Alias
+# Fastfetch (run once at shell startup if available)
+if command -v fastfetch &> /dev/null; then
+  fastfetch
+fi
+
+# WezTerm integration script
+if [ -f "/etc/profile.d/wezterm.sh" ]; then
+  source "/etc/profile.d/wezterm.sh"
+fi
+
+# Auto-Warpify (Warp integration telemetry hook)
+if [ -z "$TMUX" ]; then
+  [[ "$-" == *i* ]] && printf 'P$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "zsh", "uname": "Linux" }}¿' 
+fi
+
+# --- Aliases ---
 alias mkdir="mkdir -p"
 alias weather='curl -s https://wttr.in/Asingan, Philippines'
+alias myip="curl http://ipecho.net/plain; echo"
+alias config="nvim $HOME/.zshrc"
+alias reload="source $HOME/.zshrc"
+alias his_fix="fix_zsh_history"
+alias gbda='git branch --no-color --merged | command grep -vE "^(\+|\*|\s*(master|develop|dev)\s*$)" | command xargs -n 1 git branch -d'
 
-if command -v lsd &> /dev/null; then
-  alias ls="lsd"
+if command -v eza &> /dev/null; then
+  alias ls="eza -l --icons"
 fi
 
 if command -v bat &> /dev/null; then
@@ -138,49 +122,24 @@ if command -v nvim &> /dev/null; then
   alias vim="nvim"
 fi
 
-if command -v fdfind &>/dev/null; then
+if command -v fdfind &> /dev/null; then
   alias fd="fdfind"
 fi
 
-if command -v neovide &>/dev/null; then
+if command -v neovide &> /dev/null; then
   alias nv="neovide"
 fi
 
-if command -v lazydocker &>/dev/null; then
+if command -v lazydocker &> /dev/null; then
   alias lzd="lazydocker"
 fi
 
-if command -v eza &>/dev/null; then
-  alias ls="eza -l --icons"
-fi
-
-alias myip="curl http://ipecho.net/plain; echo"
-alias config="nvim $HOME/.zshrc"
-alias reload="source $HOME/.zshrc"
-alias his_fix="fix_zsh_history"
-alias gbda='git branch --no-color --merged | command grep -vE "^(\+|\*|\s*(master|develop|dev)\s*$)" | command xargs -n 1 git branch -d'
-
-# Starship.rs
-eval "$(starship init zsh)"
-
-#
+# Example test aliases (compose-based)
 alias test_offer="docker compose build && COLLECTION=offer-engine docker compose -f docker-compose-test.yml -p goose_api_postman_runner up --abort-on-container-exit --remove-orphans"
 
 alias test_user_offer="docker compose build && COLLECTION=user docker compose -f docker-compose-test.yml -p goose_api_postman_runner up --abort-on-container-exit --remove-orphans && COLLECTION=offer-engine docker compose -f docker-compose-test.yml -p goose_api_postman_runner up --abort-on-container-exit --remove-orphans"
 
-# fastfetch
-if command -v fastfetch &> /dev/null; then
-  fastfetch
-fi
+# Alias to open this file
+alias config="nvim $HOME/.zshrc"
 
-# Auto-Warpify
-if [ -z "$TMUX" ]; then
-  [[ "$-" == *i* ]] && printf 'P$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "zsh", "uname": "Linux" }}œ' 
-fi
-
-export EDITOR="nvim"
-
-# Wezterm integration script
-if [ -f "/etc/profile.d/wezterm.sh" ]; then
-  source "/etc/profile.d/wezterm.sh"
-fi
+# End of file
