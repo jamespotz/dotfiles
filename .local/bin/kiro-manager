@@ -1,0 +1,263 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+APP_NAME="Kiro"
+BIN_NAME="kiro"
+
+INSTALL_DIR="${HOME}/.local/share/kiro"
+BIN_DIR="${HOME}/.local/bin"
+DESKTOP_DIR="${HOME}/.local/share/applications"
+DESKTOP_FILE="${DESKTOP_DIR}/kiro.desktop"
+VERSION_FILE="${INSTALL_DIR}/.kiro-installed-version"
+
+METADATA_URL="https://prod.download.desktop.kiro.dev/stable/metadata-linux-x64-stable.json"
+
+TMP_DIR="$(mktemp -d)"
+TARBALL="${TMP_DIR}/kiro.tar.gz"
+
+cleanup() {
+  rm -rf "$TMP_DIR"
+}
+trap cleanup EXIT
+
+need_cmd() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    echo "Missing required command: $1"
+    echo "Install it first, then rerun this script."
+    exit 1
+  fi
+}
+
+check_requirements() {
+  need_cmd curl
+  need_cmd tar
+  need_cmd grep
+  need_cmd sed
+  need_cmd head
+
+  if ! command -v jq >/dev/null 2>&1; then
+    echo "Missing required command: jq"
+    echo
+    echo "Install it with one of these:"
+    echo "  Fedora/RHEL: sudo dnf install -y jq"
+    echo "  Ubuntu/Debian: sudo apt install -y jq"
+    echo "  Arch: sudo pacman -S jq"
+    exit 1
+  fi
+
+  local arch
+  arch="$(uname -m)"
+
+  if [[ "$arch" != "x86_64" ]]; then
+    echo "Unsupported architecture: $arch"
+    echo "This script currently targets the official Linux x64 IDE metadata."
+    exit 1
+  fi
+
+  local glibc_version
+  glibc_version="$(ldd --version 2>/dev/null | head -n1 | grep -oE '[0-9]+\.[0-9]+' | head -n1 || true)"
+
+  if [[ -n "$glibc_version" ]]; then
+    local major minor
+    major="${glibc_version%%.*}"
+    minor="${glibc_version#*.}"
+
+    if (( major < 2 || (major == 2 && minor < 39) )); then
+      echo "Your glibc version is ${glibc_version}."
+      echo "Kiro IDE for Linux requires glibc 2.39 or newer."
+      exit 1
+    fi
+  fi
+}
+
+get_latest_info() {
+  local metadata
+  metadata="$(curl -fsSL "$METADATA_URL")"
+
+  KIRO_URL="$(
+    printf '%s' "$metadata" \
+      | jq -r '.releases[].updateTo.url | select(endswith(".tar.gz"))' \
+      | head -n1
+  )"
+
+  KIRO_VERSION="$(
+    printf '%s' "$metadata" \
+      | jq -r '
+          .releases[0].version // 
+          .releases[0].updateTo.version // 
+          .version // 
+          empty
+        ' \
+      | head -n1
+  )"
+
+  if [[ -z "${KIRO_URL:-}" || "$KIRO_URL" == "null" ]]; then
+    echo "Could not find a Linux .tar.gz download URL from Kiro metadata."
+    exit 1
+  fi
+
+  if [[ -z "${KIRO_VERSION:-}" || "$KIRO_VERSION" == "null" ]]; then
+    KIRO_VERSION="unknown"
+  fi
+}
+
+install_desktop_entry() {
+  mkdir -p "$DESKTOP_DIR"
+
+  local icon_path="${INSTALL_DIR}/resources/app/resources/linux/code.png"
+
+  cat > "$DESKTOP_FILE" <<EOF
+[Desktop Entry]
+Name=Kiro
+Comment=Kiro - AI-powered development environment
+GenericName=Text Editor
+Exec=${INSTALL_DIR}/kiro %F
+Icon=${icon_path}
+Type=Application
+StartupNotify=true
+StartupWMClass=kiro
+Categories=TextEditor;Development;IDE;
+MimeType=text/plain;inode/directory;
+Actions=new-empty-window;
+Keywords=kiro;ide;editor;ai;vscode;
+Terminal=false
+
+[Desktop Action new-empty-window]
+Name=New Empty Window
+Exec=${INSTALL_DIR}/kiro --new-window
+Icon=${icon_path}
+EOF
+
+  chmod +x "$DESKTOP_FILE"
+
+  if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database "$DESKTOP_DIR" >/dev/null 2>&1 || true
+  fi
+}
+
+install_kiro() {
+  check_requirements
+  get_latest_info
+
+  echo "Downloading latest Kiro IDE..."
+  echo "URL: $KIRO_URL"
+  curl -fL "$KIRO_URL" -o "$TARBALL"
+
+  echo "Installing to: $INSTALL_DIR"
+
+  rm -rf "${INSTALL_DIR}.new"
+  mkdir -p "${INSTALL_DIR}.new"
+
+  tar -xzf "$TARBALL" -C "${INSTALL_DIR}.new" --strip-components=1
+
+  if [[ ! -x "${INSTALL_DIR}.new/kiro" ]]; then
+    echo "Install failed: expected executable not found at ${INSTALL_DIR}.new/kiro"
+    rm -rf "${INSTALL_DIR}.new"
+    exit 1
+  fi
+
+  rm -rf "$INSTALL_DIR"
+  mv "${INSTALL_DIR}.new" "$INSTALL_DIR"
+
+  mkdir -p "$BIN_DIR"
+  ln -sfn "${INSTALL_DIR}/bin/kiro" "${BIN_DIR}/kiro"
+
+  install_desktop_entry
+
+  printf '%s\n' "$KIRO_VERSION" > "$VERSION_FILE"
+
+  echo
+  echo "Kiro IDE installed successfully."
+  echo "Version: $KIRO_VERSION"
+  echo "Binary: ${BIN_DIR}/kiro"
+  echo "Desktop entry: $DESKTOP_FILE"
+  echo
+  echo "Run it with:"
+  echo "  kiro"
+}
+
+update_kiro() {
+  check_requirements
+  get_latest_info
+
+  local current_version="not installed"
+  if [[ -f "$VERSION_FILE" ]]; then
+    current_version="$(cat "$VERSION_FILE")"
+  fi
+
+  echo "Current version: $current_version"
+  echo "Latest version:  $KIRO_VERSION"
+
+  if [[ "$current_version" == "$KIRO_VERSION" && "$KIRO_VERSION" != "unknown" ]]; then
+    echo "Kiro IDE is already up to date."
+    exit 0
+  fi
+
+  echo "Updating Kiro IDE..."
+  install_kiro
+}
+
+uninstall_kiro() {
+  echo "Uninstalling Kiro IDE..."
+
+  rm -rf "$INSTALL_DIR"
+  rm -f "${BIN_DIR}/kiro"
+  rm -f "$DESKTOP_FILE"
+
+  if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database "$DESKTOP_DIR" >/dev/null 2>&1 || true
+  fi
+
+  echo "Kiro IDE uninstalled."
+}
+
+show_status() {
+  echo "Install dir: $INSTALL_DIR"
+  echo "Binary:      ${BIN_DIR}/kiro"
+  echo "Desktop:     $DESKTOP_FILE"
+
+  if [[ -x "${INSTALL_DIR}/kiro" ]]; then
+    echo "Status:      installed"
+  else
+    echo "Status:      not installed"
+  fi
+
+  if [[ -f "$VERSION_FILE" ]]; then
+    echo "Version:     $(cat "$VERSION_FILE")"
+  fi
+}
+
+usage() {
+  cat <<EOF
+Usage:
+  $0 install
+  $0 update
+  $0 uninstall
+  $0 status
+
+Commands:
+  install     Install the latest Kiro IDE desktop app
+  update      Download and replace with the latest Kiro IDE
+  uninstall   Remove Kiro IDE, symlink, and desktop entry
+  status      Show current install status
+EOF
+}
+
+case "${1:-}" in
+  install)
+    install_kiro
+    ;;
+  update)
+    update_kiro
+    ;;
+  uninstall)
+    uninstall_kiro
+    ;;
+  status)
+    show_status
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac

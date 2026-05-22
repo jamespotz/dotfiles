@@ -1,0 +1,5 @@
+*.log
+.config/tmux/plugins/
+.config/go
+.config/github-copilot
+.env
