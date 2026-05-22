@@ -1,0 +1,9 @@
+# Ignore the hidden git directory
+\.git
+
+# Ignore a specific file
+README.md
+
+# Ignore all files ending in .bak
+\.bak$
+
