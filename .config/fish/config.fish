@@ -10,6 +10,8 @@ set -gx FZF_DEFAULT_OPTS "--layout=reverse --exact --border=bold --border=rounde
 
 mise activate fish | source
 zoxide init fish | source
+direnv hook fish | source
+
 ### FZF ###
 # Enables the following keybindings:
 # CTRL-t = fzf select

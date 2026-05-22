@@ -27,6 +27,7 @@ export PATH="$HOME/.local/bin:$PATH"
 
 eval "$(mise activate bash)"
 eval "$(zoxide init bash)"
+eval "$(direnv hook bash)"
 
 if [[ "$TERM_PROGRAM" != "kiro" ]]; then
   eval "$(starship init bash)"
