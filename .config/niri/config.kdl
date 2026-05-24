@@ -920,7 +920,7 @@ environment {
 debug {
     // Allows notification actions and window activation from Noctalia.
     honor-xdg-activation-with-invalid-serial
-    render-drm-device "/dev/dri/renderD128"
+    render-drm-device "/dev/dri/by-path/pci-0000:01:00.0-render"
     wait-for-frame-completion-before-queueing
 }
 spawn-at-startup "qs" "-c" "noctalia-shell"
