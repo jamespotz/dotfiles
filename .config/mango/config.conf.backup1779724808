@@ -164,5 +164,3 @@ exec-once=systemctl --user start mango-session.target
 source=~/.config/mango/dms/colors.conf
 source=~/.config/mango/dms/layout.conf
 source=~/.config/mango/dms/outputs.conf
-
-source=./dms/cursor.conf
