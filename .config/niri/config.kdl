@@ -22,19 +22,11 @@ gestures {
 // Find the full list of options on the wiki:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Input
 input {
+    focus-follows-mouse max-scroll-amount="33%"
+
     keyboard {
-        xkb {
-            // You can set rules, model, layout, variant and options.
-            // For more information, see xkeyboard-config(7).
+        xkb 
 
-            // For example:
-            // layout "us,ru"
-            // options "grp:win_space_toggle,compose:ralt,ctrl:nocaps"
-
-            // If this section is empty, niri will fetch xkb settings
-            // from org.freedesktop.locale1. You can control these using
-            // localectl set-x11-keymap.
-        }
 
         // Enable numlock on startup, omitting this setting disables it.
         numlock
@@ -58,6 +50,8 @@ input {
     }
 
     mouse {
+        accel-profile "flat"
+
         // off
         // natural-scroll
         // accel-speed 0.2
@@ -65,16 +59,8 @@ input {
         // scroll-method "no-scroll"
     }
 
-    trackpoint {
-        // off
-        // natural-scroll
-        // accel-speed 0.2
-        // accel-profile "flat"
-        // scroll-method "on-button-down"
-        // scroll-button 273
-        // scroll-button-lock
-        // middle-emulation
-    }
+    trackpoint 
+
 
     // Uncomment this to make the mouse warp to the center of newly focused windows.
     // warp-mouse-to-focus
@@ -133,9 +119,9 @@ layout {
     border {
         off
         width 4
-        active-color   "#707070"      // Neutral gray
+        active-color "#707070"      // Neutral gray
         inactive-color "#d0d0d0"      // Light gray
-        urgent-color   "#cc4444"      // Softer red
+        urgent-color "#cc4444"      // Softer red
     }
     shadow {
         softness 30
@@ -143,8 +129,7 @@ layout {
         offset x=0 y=5
         color "#0007"
     }
-    struts {
-    }
+    struts 
 }
 layer-rule {
     match namespace="^quickshell$"
@@ -170,7 +155,7 @@ prefer-no-csd
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 animations {
     workspace-switch {
-        spring damping-ratio=0.80 stiffness=523 epsilon=0.0001
+        spring damping-ratio=0.8 stiffness=523 epsilon=0.0001
     }
     window-open {
         duration-ms 150
@@ -209,38 +194,38 @@ window-rule {
     // This regular expression is intentionally made as specific as possible,
     // since this is the default config, and we want no false positives.
     // You can get away with just app-id="wezterm" if you want.
-    match app-id=r#"^org\.wezfurlong\.wezterm$"#
-    default-column-width {}
+    match app-id=r"^org\.wezfurlong\.wezterm$"
+    default-column-width 
 }
 window-rule {
-    match app-id=r#"^org\.gnome\."#
+    match app-id=r"^org\.gnome\."
     draw-border-with-background false
     geometry-corner-radius 12
     clip-to-geometry true
 }
 window-rule {
-    match app-id=r#"^gnome-control-center$"#
-    match app-id=r#"^pavucontrol$"#
-    match app-id=r#"^nm-connection-editor$"#
+    match app-id=r"^gnome-control-center$"
+    match app-id=r"^pavucontrol$"
+    match app-id=r"^nm-connection-editor$"
     default-column-width { proportion 0.5; }
     open-floating false
 }
 window-rule {
-    match app-id=r#"^org\.gnome\.Calculator$"#
-    match app-id=r#"^gnome-calculator$"#
-    match app-id=r#"^galculator$"#
-    match app-id=r#"^blueman-manager$"#
-    match app-id=r#"^org\.gnome\.Nautilus$"#
-    match app-id=r#"^xdg-desktop-portal$"#
+    match app-id=r"^org\.gnome\.Calculator$"
+    match app-id=r"^gnome-calculator$"
+    match app-id=r"^galculator$"
+    match app-id=r"^blueman-manager$"
+    match app-id=r"^org\.gnome\.Nautilus$"
+    match app-id=r"^xdg-desktop-portal$"
     open-floating true
 }
 window-rule {
-    match app-id=r#"^steam$"# title=r#"^notificationtoasts_\d+_desktop$"#
+    match app-id=r"^steam$" title=r"^notificationtoasts_\d+_desktop$"
     default-floating-position x=10 y=10 relative-to="bottom-right"
     open-focused false
 }
 window-rule {
-    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    match app-id=r"^org\.wezfurlong\.wezterm$"
     match app-id="Alacritty"
     match app-id="zen"
     match app-id="com.mitchellh.ghostty"
@@ -248,14 +233,14 @@ window-rule {
     draw-border-with-background false
 }
 window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id=r"firefox$" title="^Picture-in-Picture$"
     match app-id="zoom"
     open-floating true
 }
 // Open dms windows as floating by default
 window-rule {
-    match app-id=r#"org.quickshell$"#
-    match app-id=r#"com.danklinux.dms$"#
+    match app-id=r"org.quickshell$"
+    match app-id=r"com.danklinux.dms$"
     open-floating true
 }
 debug {
