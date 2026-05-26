@@ -8,5 +8,3 @@ set +e
 wl-paste --watch cliphist store &
 
 systemctl --user start mango-session.target
-
-dms run >/dev/null 2>&1 &
