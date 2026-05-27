@@ -2,30 +2,34 @@
 
 # Force scrcpy to use Wayland for the preview window
 export SDL_VIDEODRIVER=wayland
+APP_NAME="Android Camera"
 
+notify-send "$APP_NAME" "Starting Android camera..."
 # 1. Look for "Virtual Camera" (matches your current output)
 VIDEO_DEV=$(v4l2-ctl --list-devices 2>/dev/null | grep -A 1 "Virtual Camera" | tail -n 1 | xargs)
 
-# 2. Fallback: Look for "AndroidCam" 
+# 2. Fallback: Look for "AndroidCam"
 if [ -z "$VIDEO_DEV" ]; then
-    VIDEO_DEV=$(v4l2-ctl --list-devices 2>/dev/null | grep -A 1 "AndroidCam" | tail -n 1 | xargs)
+  VIDEO_DEV=$(v4l2-ctl --list-devices 2>/dev/null | grep -A 1 "AndroidCam" | tail -n 1 | xargs)
 fi
 
 # 3. Fallback: Load module if it disappeared
 if [ -z "$VIDEO_DEV" ]; then
-    echo "⚠️ Virtual camera device not found. Attempting to start it..."
-    sudo modprobe v4l2loopback exclusive_caps=1 card_label="Virtual Camera"
-    sleep 1
-    VIDEO_DEV=$(v4l2-ctl --list-devices 2>/dev/null | grep -A 1 "Virtual Camera" | tail -n 1 | xargs)
+  echo "⚠️ Virtual camera device not found. Attempting to start it..."
+  sudo modprobe v4l2loopback exclusive_caps=1 card_label="Virtual Camera"
+  sleep 1
+  VIDEO_DEV=$(v4l2-ctl --list-devices 2>/dev/null | grep -A 1 "Virtual Camera" | tail -n 1 | xargs)
 fi
 
 # Exit if everything fails
 if [ -z "$VIDEO_DEV" ]; then
-    echo "❌ Error: Could not find or create a v4l2loopback video device."
-    exit 1
+  echo "❌ Error: Could not find or create a v4l2loopback video device."
+  notify-send -u critical "$APP_NAME" "Failed: Could not find or create a v4l2loopback video device."
+  exit 1
 fi
 
 echo "🚀 Starting High-Performance Android Camera stream to $VIDEO_DEV..."
+notify-send "$APP_NAME" "Camera stream starting on $VIDEO_DEV"
 
 # HIGH PERFORMANCE ARGUMENTS USED BELOW:
 # --video-codec=h265         -> Hardware accelerated encoding (uses less phone CPU)
@@ -43,3 +47,13 @@ scrcpy \
   --camera-size=1920x1080 \
   --no-audio \
   "$@"
+
+SCRCPY_EXIT_CODE=$?
+
+if [ "$SCRCPY_EXIT_CODE" -eq 0 ]; then
+  notify-send "$APP_NAME" "Camera stream stopped."
+else
+  notify-send -u critical "$APP_NAME" "scrcpy failed or crashed. Exit code: $SCRCPY_EXIT_CODE"
+fi
+
+exit "$SCRCPY_EXIT_CODE"
