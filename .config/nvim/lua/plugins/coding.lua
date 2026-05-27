@@ -12,7 +12,7 @@ return {
         json = { "prettier" },
         yaml = { "prettier" },
         markdown = { "prettier" },
-        kdl = { "kdlfmt" }
+        -- kdl = { "kdlfmt" }
       }
       return opts
     end,

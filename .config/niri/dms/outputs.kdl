@@ -8,6 +8,7 @@ output "DP-2" {
         off
     }
     layout {
+        default-column-width { proportion 0.6667; }
         always-center-single-column
     }
 }
