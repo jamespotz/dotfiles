@@ -120,18 +120,18 @@ binds {
     Mod+Shift+V { switch-focus-between-floating-and-tiling; }
     Mod+Shift+WheelScrollDown { focus-column-right; }
     Mod+Shift+WheelScrollUp { focus-column-left; }
-    Mod+T hotkey-overlay-title="Open Terminal" { spawn "wlrctl" "window" "focus" "app_id:com.mitchellh.ghostty" "||" "ghostty"; }
     Mod+Up { focus-window-up; }
     Mod+W { toggle-column-tabbed-display; }
     Mod+WheelScrollLeft { focus-column-left; }
     Mod+WheelScrollRight { focus-column-right; }
-    Super+B { spawn "wlrctl" "window" "focus" "app_id:helium" "||" "helium-browser-bin"; }
     Mod+Shift+P { power-off-monitors; }
     Ctrl+Print { screenshot-screen; }
     Ctrl+XF86Launch1 { screenshot-screen; }
     Print { screenshot; }
     XF86Launch1 { screenshot; }
     Mod+Shift+E { quit; }
+    Mod+T hotkey-overlay-title="Open Terminal" { spawn "ghostty"; }
+    Super+B { spawn "helium-browser-bin"; }
     Super+E { spawn "nautilus"; }
     Mod+D repeat=false { toggle-overview; }
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
