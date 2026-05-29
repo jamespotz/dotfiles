@@ -240,6 +240,7 @@ window-rule {
 }
 debug {
     honor-xdg-activation-with-invalid-serial
+    wait-for-frame-completion-before-queueing
 }
 
 // Override to disable super+tab
@@ -262,3 +263,13 @@ include "dms/cursor.kdl"
 include "dms/windowrules.kdl"
 include "dms/wpblur.kdl"
 
+
+blur {
+    passes 3
+
+    offset 3.000000000000001
+
+    noise 0.02
+
+    saturation 1.5000000000000004
+}
