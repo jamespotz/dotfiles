@@ -18,7 +18,7 @@ export CLUTTER_BACKEND="wayland"
 
 # Java and Electron app support
 export _JAVA_AWT_WM_NONREPARENTING="1"
-export ELECTRON_OZONE_PLATFORM_HINT="auto"
+export ELECTRON_OZONE_PLATFORM_HINT="wayland"
 
 # Qt theming
 export QT_QPA_PLATFORMTHEME="qt6ct"
@@ -27,5 +27,6 @@ export QT_QPA_PLATFORMTHEME="qt6ct"
 export __GL_VRR_ALLOWED="1"
 export __GL_GSYNC_ALLOWED="1"
 
+export WLR_DRM_NO_ATOMIC="1"
 # Launch mango
 exec mango "$@"
