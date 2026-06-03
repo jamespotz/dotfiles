@@ -39,3 +39,11 @@ alias lt='eza --tree --icons'
 eval "$(atuin init bash)"
 
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path bash)"
+
+# pnpm
+export PNPM_HOME="/home/jamespotz/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end

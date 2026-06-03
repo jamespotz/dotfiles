@@ -35,3 +35,10 @@ alias ping='ping -c 5'
 alias update='sudo dnf update'
 
 string match -q "$TERM_PROGRAM" kiro and . (kiro --locate-shell-integration-path fish)
+
+# pnpm
+set -gx PNPM_HOME "/home/jamespotz/.local/share/pnpm"
+if not string match -q -- "$PNPM_HOME/bin" $PATH
+  set -gx PATH "$PNPM_HOME/bin" $PATH
+end
+# pnpm end
