@@ -42,3 +42,6 @@ if not string match -q -- "$PNPM_HOME/bin" $PATH
   set -gx PATH "$PNPM_HOME/bin" $PATH
 end
 # pnpm end
+
+# direnv
+set -g direnv_fish_mode eval_on_arrow

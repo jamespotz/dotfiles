@@ -13,7 +13,7 @@ binds {
     Mod+V hotkey-overlay-title="Clipboard Manager" { spawn "dms" "ipc" "call" "clipboard" "toggle"; }
     Mod+Y hotkey-overlay-title="Browse Wallpapers" { spawn "dms" "ipc" "call" "dankdash" "wallpaper"; }
     Super+Alt+P hotkey-overlay-title="Pause Screen Recording" { spawn "dms" "ipc" "call" "screenRecorder" "togglePause"; }
-    Super+Alt+R hotkey-overlay-title="Start Screen Record" { spawn "dms" "ipc" "call" "screenRecorder" "toggleRecording"; }
+    Super+Alt+R { spawn "dms" "ipc" "call" "screenCaptureToolbar" "toggle"; }
     Super+Alt+S hotkey-overlay-title="Stop Screen Recording" { spawn "dms" "ipc" "call" "screenRecorder" "stopRecording"; }
     Super+X hotkey-overlay-title="Power Menu: Toggle" { spawn "dms" "ipc" "call" "powermenu" "toggle"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "decrement" "3"; }
