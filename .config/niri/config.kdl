@@ -275,3 +275,5 @@ blur {
 
     saturation 1.5000000000000004
 }
+
+include "noctalia.kdl"
