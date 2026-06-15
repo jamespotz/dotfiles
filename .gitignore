@@ -3,3 +3,5 @@
 .config/go
 .config/github-copilot
 .env
+legacy-src
+audit
