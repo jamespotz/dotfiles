@@ -1,6 +1,3 @@
--- ==================
--- LAYER RULES
--- ==================
 hl.layer_rule({
   name = "noctalia",
   match = {
@@ -11,7 +8,7 @@ hl.layer_rule({
   blur_popups = true,
 })
 
-hl.layer_rule({
-  match = { namespace = "^(quickshell)$" },
-  no_anim = true,
-})
+-- hl.layer_rule({
+--   match = { namespace = "^(quickshell)$" },
+--   no_anim = true,
+-- })
