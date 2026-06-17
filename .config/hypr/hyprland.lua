@@ -16,10 +16,14 @@
 
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
 hl.monitor({
-  output   = "DP-2",
+  output   = "DP-1",
   mode     = "3440x1440@144",
   position = "auto",
   scale    = "1.25",
+  -- bitdepth      = 10,
+  -- cm            = "hdr",
+  -- sdrbrightness = 1.3,
+  -- sdrsaturation = 0.98,
 })
 
 -----------------------

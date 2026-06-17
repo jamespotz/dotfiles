@@ -59,6 +59,7 @@ hl.config({
 hl.config({
   scrolling = {
     fullscreen_on_one_column = true,
+    follow_min_visible = 1
   },
 })
 
@@ -90,5 +91,15 @@ hl.config({
   binds = {
     workspace_back_and_forth = true,
     workspace_center_on = 1,
+  },
+})
+
+-- unscale XWayland
+hl.config({
+  xwayland = {
+    force_zero_scaling = true
+  },
+  cursor = {
+    no_hardware_cursors = true
   },
 })

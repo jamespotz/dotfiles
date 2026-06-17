@@ -25,16 +25,7 @@ hl.window_rule({
 })
 
 hl.window_rule({
-  match = { class = "^(firefox)$", title = "^(Picture-in-Picture)$" },
-  float = true,
-})
-
--- Hyprland-run windowrule
-hl.window_rule({
-  name  = "move-hyprland-run",
-  match = { class = "hyprland-run" },
-
-  move  = "20 monitor_h-120",
+  match = { class = "^(firefox|app\\.zen_browser\\.zen)$", title = "^(Picture-in-Picture)$" },
   float = true,
 })
 
@@ -69,4 +60,11 @@ hl.window_rule({
   },
 
   no_focus = true,
+})
+
+hl.window_rule({
+  match = {
+    title = "^Extension: Bitwarden Password Manager - Bitwarden — Zen Browser$",
+  },
+  float = true,
 })
