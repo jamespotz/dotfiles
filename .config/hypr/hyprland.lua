@@ -1,3 +1,5 @@
+local utils = dofile(os.getenv("HOME") .. "/.config/hypr/utils.lua")
+
 hl.monitor({
   output = "DP-1",
   disabled = false,
@@ -38,11 +40,14 @@ hl.gesture({
   action = "workspace"
 })
 
-require("env")
-require("autostart")
-require("config")
-require("binds")
-require("window_rules")
-require("layer_rules")
+utils.safe_load("env")
+utils.safe_load("autostart")
+utils.safe_load("config")
+utils.safe_load("binds")
+utils.safe_load("window_rules")
+utils.safe_load("layer_rules")
+utils.safe_load("animations")
+utils.safe_load("plugins/init")
+
+-- For Noctalia Color templates
 require("noctalia")
-require("animations")

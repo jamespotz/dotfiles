@@ -1,4 +1,12 @@
 hl.window_rule({
+  match = {
+    class = ".*",
+  },
+  opacity = 0.9,
+  xray = false
+})
+
+hl.window_rule({
   match = { class = "^(org\\.gnome\\.)$" },
   rounding = 12,
 })
@@ -22,6 +30,7 @@ hl.window_rule({
 hl.window_rule({
   match = { class = "^(xdg-desktop-portal)$" },
   float = true,
+  center = true,
 })
 
 hl.window_rule({
@@ -54,8 +63,17 @@ hl.window_rule({
 })
 
 hl.window_rule({
+  match = { title = ".*Bitwarden.*" },
+  float = true,
+  center = true,
+  size = { "600", "700" },
+})
+
+hl.window_rule({
   match = {
-    title = "^Extension: Bitwarden Password Manager - Bitwarden — Zen Browser$",
+    class = "^DesktopEditors$",
+    title = ".*"
   },
   float = true,
+  center = true
 })
