@@ -6,14 +6,6 @@ hl.monitor({
   mode = "3440x1440@144.00Hz",
   position = "0x0",
   scale = 1.25,
-  bitdepth = 10,
-  cm = "hdredid",
-  sdrbrightness = 0.5,
-  sdr_min_luminance = 0.1,
-  sdr_max_luminance = 427,
-  min_luminance = 0.1,
-  max_luminance = 427,
-  max_avg_luminance = 409,
 })
 
 -----------------------
@@ -50,4 +42,4 @@ utils.safe_load("animations")
 utils.safe_load("plugins/init")
 
 -- For Noctalia Color templates
-require("noctalia")
+require("noctalia").apply_theme()
