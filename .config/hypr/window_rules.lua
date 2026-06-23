@@ -2,7 +2,7 @@ hl.window_rule({
   match = {
     class = ".*",
   },
-  opacity = 0.9,
+  opacity = 0.95,
   xray = false
 })
 
@@ -34,8 +34,15 @@ hl.window_rule({
 })
 
 hl.window_rule({
-  match = { class = "^(firefox|app\\.zen_browser\\.zen)$", title = "^(Picture-in-Picture)$" },
+  match = { class = "^(firefox||app\\.zen_browser\\.zen)$", title = "^(Picture-in-Picture)$" },
   float = true,
+})
+
+hl.window_rule({
+  match = {
+    class = "^(app\\.zen_browser\\.zen||firefox||helium)$"
+  },
+  opacity = 1
 })
 
 local suppressMaximizeRule = hl.window_rule({
