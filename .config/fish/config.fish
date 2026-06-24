@@ -45,3 +45,6 @@ end
 
 # direnv
 set -g direnv_fish_mode eval_on_arrow
+
+# Node options
+set -gx NODE_OPTIONS "--max-old-space-size=8192"
