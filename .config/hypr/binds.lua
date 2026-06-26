@@ -55,13 +55,14 @@ local function cycle_layout()
 
   hl.config({ general = { layout = layouts[next_index] } })
 end
-hl.bind("CTRL + space", cycle_layout)
+hl.bind(mainMod .. "+ ALT + space", cycle_layout)
 hl.bind(mainMod .. "+ R", hl.dsp.layout("colresize +conf"))
 hl.bind(mainMod .. "+ F", hl.dsp.layout("fit_into_view"))
 
 -- Screnshot
 hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd('grim -g "$(slurp -d)" - | wl-copy'))
 
+hl.bind(mainMod .. " +ALT +B", hl.dsp.exec_cmd("~/AppImages/helium.appimage"))
 hl.bind(mainMod .. " +B", hl.dsp.exec_cmd("flatpak run " .. browser))
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())

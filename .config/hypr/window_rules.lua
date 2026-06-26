@@ -100,7 +100,7 @@ local rules = {
     patterns = {
       "^Connexion : comptes Google %—",
       "^Sign In %- Google Accounts %— ",
-      "^Sign in %- Google Accounts %- Helium$",
+      -- "^Sign in %- Googe Accounts %- Helium$",
     }
   },
   {
