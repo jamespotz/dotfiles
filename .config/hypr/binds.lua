@@ -5,7 +5,8 @@ local browser     = "app.zen_browser.zen"
 
 local mainMod     = "SUPER" -- Sets "Windows" key as main modifier
 
-hl.bind(mainMod .. " + ALT + r", hl.dsp.exec_cmd("hyprctl reload | notify-send '🗱 Hyprland Reloaded!'"))
+hl.bind(mainMod .. " + ALT + r",
+  hl.dsp.exec_cmd("hyprctl reload && killall noctalia && noctalia && notify-send '🗱 Hyprland Reloaded!'"))
 
 -- ============================================
 -- Window Movement (SUPER + Shift + Arrows)

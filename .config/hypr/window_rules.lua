@@ -78,6 +78,16 @@ hl.window_rule({
   center = true
 })
 
+hl.window_rule({
+  match = {
+    class = "^Minecraft.*"
+  },
+  float = true,
+  center = true,
+  opacity = 1,
+  size = "1920 1080"
+})
+
 -- Bitwarden
 ---@class FloatRule
 ---@field width    integer    width as percent of monitor width  (1..100)
