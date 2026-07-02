@@ -6,7 +6,8 @@ local browser     = "app.zen_browser.zen"
 local mainMod     = "SUPER" -- Sets "Windows" key as main modifier
 
 hl.bind(mainMod .. " + ALT + r",
-  hl.dsp.exec_cmd("hyprctl reload && killall noctalia && noctalia && notify-send '🗱 Hyprland Reloaded!'"))
+  hl.dsp.exec_cmd("hyprctl reload | notify-send '🗱 Hyprland Reloaded!'"))
+hl.bind(mainMod .. " + ALT + N", hl.dsp.exec_cmd("pkill noctalia && sleep 1 && nohup noctalia &"))
 
 -- ============================================
 -- Window Movement (SUPER + Shift + Arrows)
@@ -63,8 +64,8 @@ hl.bind(mainMod .. "+ F", hl.dsp.layout("fit_into_view"))
 -- Screnshot
 hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd('grim -g "$(slurp -d)" - | wl-copy'))
 
-hl.bind(mainMod .. " +ALT +B", hl.dsp.exec_cmd("~/AppImages/helium.appimage"))
-hl.bind(mainMod .. " +B", hl.dsp.exec_cmd("flatpak run " .. browser))
+hl.bind(mainMod .. " +B", hl.dsp.exec_cmd("helium"))
+hl.bind(mainMod .. " +ALT +B", hl.dsp.exec_cmd("flatpak run " .. browser))
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 hl.bind(mainMod .. " + M",

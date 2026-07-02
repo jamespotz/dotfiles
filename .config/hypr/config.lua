@@ -21,22 +21,23 @@ hl.config({
     border_size = 2,
     layout = "scrolling",
   },
-})
 
--- ==================
--- DECORATION
--- ==================
-hl.config({
   decoration = {
-    rounding = 12,
-    active_opacity = 1.0,
-    inactive_opacity = 1.0,
+    rounding = 20,
+    rounding_power = 2,
+
     shadow = {
       enabled = true,
-      range = 30,
-      render_power = 5,
-      offset = { 0, 5 },
-      color = "rgba(00000070)",
+      range = 4,
+      render_power = 3,
+      color = 0xee1a1a1a,
+    },
+
+    blur = {
+      enabled = true,
+      size = 3,
+      passes = 2,
+      vibrancy = 0.1696,
     },
   },
 })
@@ -59,7 +60,7 @@ hl.config({
 hl.config({
   scrolling = {
     fullscreen_on_one_column = true,
-    follow_min_visible = 1
+    follow_min_visible = 1,
   },
 })
 

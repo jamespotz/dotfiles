@@ -8,7 +8,10 @@ set -gx PATH "$HOME/.local/bin" $PATH
 ### SET FZF DEFAULTS
 set -gx FZF_DEFAULT_OPTS "--layout=reverse --exact --border=bold --border=rounded --margin=3% --color=dark"
 
-mise activate fish | source
+if type -q mise
+  mise activate fish | source
+end
+
 zoxide init fish | source
 direnv hook fish | source
 
