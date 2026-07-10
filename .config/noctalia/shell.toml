@@ -1,0 +1,7 @@
+[shell.launcher.dmenu.entry.dnf]
+command = "printf 'DNF Upgrade\n'"
+label = "Commands"
+prefix = "/dnf"
+glyph = "terminal"
+global = false
+exec = "ghostty -e bash -lc 'pkexec dnf upgrade --refresh; read -rp \"Press Enter to close...\"'"

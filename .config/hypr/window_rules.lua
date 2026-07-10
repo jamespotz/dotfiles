@@ -80,6 +80,16 @@ hl.window_rule({
 
 hl.window_rule({
   match = {
+    class = "^hyprland-share-picker$",
+    title = ".*"
+  },
+  float = true,
+  center = true
+})
+
+
+hl.window_rule({
+  match = {
     class = "^Minecraft.*"
   },
   float = true,
