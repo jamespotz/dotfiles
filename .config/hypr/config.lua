@@ -74,7 +74,8 @@ hl.config({
     disable_splash_rendering   = true,
     initial_workspace_tracking = 1,
     on_focus_under_fullscreen  = 1,
-    allow_session_lock_restore = true
+    allow_session_lock_restore = true,
+    focus_on_activate          = true
   },
 })
 
