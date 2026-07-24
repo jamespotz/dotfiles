@@ -90,7 +90,7 @@ hl.window_rule({
 
 hl.window_rule({
   match = {
-    class = "^Minecraft.*"
+    class = "^Minecraft.*$"
   },
   float = true,
   center = true,
@@ -121,13 +121,6 @@ local rules = {
       "^Connexion : comptes Google %—",
       "^Sign In %- Google Accounts %— ",
       -- "^Sign in %- Googe Accounts %- Helium$",
-    }
-  },
-  {
-    width = 25,
-    height = 54,
-    patterns = {
-      "^Extension: %(MetaMask%) %- MetaMask %— Firefox",
     }
   },
 }

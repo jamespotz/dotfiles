@@ -51,3 +51,10 @@ set -g direnv_fish_mode eval_on_arrow
 
 # Node options
 set -gx NODE_OPTIONS "--max-old-space-size=8192"
+# Added by dbt Fusion extension (ensure dbt binary dir on PATH)
+if not contains "/home/jamespotz/.local/bin" $PATH
+  set -gx PATH "/home/jamespotz/.local/bin" $PATH
+end
+
+set -gx SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/ssh-agent.socket"
+
