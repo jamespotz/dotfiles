@@ -8,6 +8,7 @@ hl.config({
     sensitivity = 0,
     accel_profile = "flat",
     force_no_accel = true,
+    follow_mouse = 2
   },
 })
 

@@ -2,7 +2,7 @@ hl.window_rule({
   match = {
     class = ".*",
   },
-  opacity = 0.90,
+  opacity = 0.80,
   xray = false
 })
 
