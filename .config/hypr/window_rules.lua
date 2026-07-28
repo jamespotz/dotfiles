@@ -1,4 +1,6 @@
-hl.window_rule({
+local rule = hl.window_rule
+
+rule({
   match = {
     class = ".*",
   },
@@ -6,46 +8,41 @@ hl.window_rule({
   xray = false
 })
 
-hl.window_rule({
+rule({
   match = { class = "^(org\\.gnome\\.)$" },
   rounding = 12,
 })
 
-hl.window_rule({
+rule({
   match = { class = "^(pavucontrol)$" },
   float = true,
   size = "800 500",
 })
 
-hl.window_rule({
+rule({
   match = { class = "^(nm-connection-editor)$" },
   tile = true,
 })
 
-hl.window_rule({
+rule({
   match = { class = "^(org\\.gnome\\.Calculator)$" },
   float = true,
 })
 
-hl.window_rule({
+rule({
   match = { class = "^(xdg-desktop-portal)$" },
   float = true,
   center = true,
 })
 
-hl.window_rule({
-  match = { class = "^(firefox||app\\.zen_browser\\.zen)$", title = "^(Picture-in-Picture)$" },
-  float = true,
-})
-
-hl.window_rule({
+rule({
   match = {
     class = "^(app\\.zen_browser\\.zen||firefox||helium)$"
   },
   opacity = 1
 })
 
-local suppressMaximizeRule = hl.window_rule({
+local suppressMaximizeRule = rule({
   -- Ignore maximize requests from all apps. You'll probably like this.
   name           = "suppress-maximize-events",
   match          = { class = ".*" },
@@ -54,7 +51,7 @@ local suppressMaximizeRule = hl.window_rule({
 })
 suppressMaximizeRule:set_enabled(false)
 
-hl.window_rule({
+rule({
   -- Fix some dragging issues with XWayland
   name     = "fix-xwayland-drags",
   match    = {
@@ -69,88 +66,63 @@ hl.window_rule({
   no_focus = true,
 })
 
-hl.window_rule({
+rule({
   match = {
-    class = "^DesktopEditors$",
+    class = "^(DesktopEditors)$",
     title = ".*"
   },
   float = true,
   center = true
 })
 
-hl.window_rule({
+rule({
   match = {
-    class = "^hyprland-share-picker$",
+    class = "^(hyprland-share-picker)$",
     title = ".*"
   },
   float = true,
   center = true
 })
 
+local float_titles = {
+  "Open File", "Picture-in-Picture",
+  "_crx_nngceckbapebfimnlniiiahkandclblb"
+}
 
-hl.window_rule({
-  match = {
-    class = "^Minecraft.*$"
-  },
-  float = true,
-  center = true,
-  opacity = 1,
-  size = "1920 1080"
-})
+for _, t in ipairs(float_titles) do
+  rule({ match = { title = "^(" .. t .. ")$" }, float = true })
+end
 
--- Bitwarden
----@class FloatRule
----@field width    integer    width as percent of monitor width  (1..100)
----@field height   integer    height as percent of monitor height (1..100)
----@field patterns string[]   Lua patterns matched against window title
+---@class WindowSpec
+---@field by      "class"|"title"
+---@field name    string                  identifier (becomes regex ^(name)$)
+---@field float?  boolean
+---@field center? boolean
+---@field size?   string                  "W H"
+---@field extras? table[]                 list of additional rule({...}) bodies (arbitrary keys)
 
----@type FloatRule[]
-local rules = {
+---@type WindowSpec[]
+local app_specs = {
+  { by = "title", name = "Bitwarden",   float = true, center = true,     size = "920 780" },
   {
-    width = 30,
-    height = 54,
-    patterns = {
-      "%(Bitwarden.*Password Manager%) %- Bitwarden",
-      "^Bitwarden$",
-    }
-  },
-  {
-    width = 25,
-    height = 54,
-    patterns = {
-      "^Connexion : comptes Google %—",
-      "^Sign In %- Google Accounts %— ",
-      -- "^Sign in %- Googe Accounts %- Helium$",
-    }
+    by = "title",
+    name = "Minecraft.*",
+    float = true,
+    center = true,
+    size = "1920 1080",
+    extras = { { dim_around = true }, { immediate = true } },
   },
 }
 
----Return true if `title` matches any pattern in `rule`.
----@param title string
----@param rule  FloatRule
----@return boolean
-local function matches(title, rule)
-  for _, pattern in ipairs(rule.patterns) do
-    if title:match(pattern) then return true end
+for _, s in ipairs(app_specs) do
+  local match = { [s.by] = "^(" .. s.name .. ")$" }
+  -- Each property of the spec becomes its own one-property rule (Hyprland
+  -- prefers single-property rules; multi-property rules don't always merge).
+  if s.float then rule({ match = match, float = true }) end
+  if s.center then rule({ match = match, center = true }) end
+  if s.size then rule({ match = match, size = s.size }) end
+  for _, extra in ipairs(s.extras or {}) do
+    extra.match = match
+    rule(extra)
   end
-  return false
 end
-
-hl.on("window.title", function(window)
-  local title = window.title or ""
-  for _, rule in ipairs(rules) do
-    if matches(title, rule) then
-      local monitor = hl.get_active_monitor()
-      if not monitor then return end
-
-      hl.dispatch(hl.dsp.window.float({ window = window, action = "on" }))
-      hl.dispatch(hl.dsp.window.center({ window = window, action = "on" }))
-      hl.dispatch(hl.dsp.window.resize({
-        window = window,
-        x = math.floor(monitor.width * rule.width / 100),
-        y = math.floor(monitor.height * rule.height / 100),
-      }))
-      return
-    end
-  end
-end)
