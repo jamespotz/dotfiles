@@ -31,6 +31,10 @@ keybind = ctrl+t=new_tab
 keybind = ctrl+plus=increase_font_size:1
 keybind = ctrl+minus=decrease_font_size:1
 keybind = ctrl+zero=reset_font_size
+keybind = ctrl+h=goto_split:left
+keybind = ctrl+j=goto_split:up
+keybind = ctrl+k=goto_split:down
+keybind = ctrl+l=goto_split:right
 
 # Material 3 UI elements
 unfocused-split-opacity = 0.7
