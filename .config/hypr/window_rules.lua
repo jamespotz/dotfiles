@@ -86,7 +86,8 @@ rule({
 
 local float_titles = {
   "Open File", "Picture-in-Picture",
-  "_crx_nngceckbapebfimnlniiiahkandclblb"
+  "_crx_nngceckbapebfimnlniiiahkandclblb",
+  "gopeed"
 }
 
 for _, t in ipairs(float_titles) do
@@ -103,7 +104,7 @@ end
 
 ---@type WindowSpec[]
 local app_specs = {
-  { by = "title", name = "Bitwarden",   float = true, center = true,     size = "920 780" },
+  { by = "title", name = "Bitwarden", float = true, center = true, size = "920 780" },
   {
     by = "title",
     name = "Minecraft.*",
