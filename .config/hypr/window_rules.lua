@@ -84,6 +84,14 @@ rule({
   center = true
 })
 
+hl.window_rule({
+  name  = "float-zoom-popups",
+  match = {
+    class = "^(zoom)$",
+  },
+  float = true,
+})
+
 local float_titles = {
   "Open File", "Picture-in-Picture",
   "_crx_nngceckbapebfimnlniiiahkandclblb",
@@ -111,7 +119,7 @@ local app_specs = {
     float = true,
     center = true,
     size = "1920 1080",
-    extras = { { dim_around = true }, { immediate = true } },
+    extras = { { dim_around = true }, { immediate = true }, { opacity = 1 } },
   },
 }
 

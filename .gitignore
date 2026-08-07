@@ -7,3 +7,4 @@ legacy-src
 audit
 references
 fish_variables
+.config/herdr/session.json

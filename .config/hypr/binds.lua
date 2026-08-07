@@ -50,6 +50,12 @@ hl.bind("ALT + z", hl.dsp.workspace.toggle_special("scratchpad"), { description 
 local function cycle_layout()
   local layouts = { "dwindle", "master", "scrolling", "monocle" }
   local current = hl.get_config("general.layout") or "dwindle"
+  local layout_icons = {
+    dwindle = "󰕰",
+    master = "󰯌",
+    scrolling = "󰹹",
+    monocle = "󰍹",
+  }
 
   local next_index = 1
   for i, l in ipairs(layouts) do
@@ -59,7 +65,16 @@ local function cycle_layout()
     end
   end
 
-  hl.config({ general = { layout = layouts[next_index] } })
+
+  local next_layout = layouts[next_index]
+  local icon = layout_icons[next_layout] or "󰖯"
+  hl.config({ general = { layout = next_layout } })
+
+  hl.dispatch(
+    hl.dsp.exec_cmd(
+      "notify-send 'Layout' '" .. icon .. "  " .. next_layout .. "'"
+    )
+  )
 end
 hl.bind(mainMod .. "+ ALT + space", cycle_layout, { description = "Cycle layout" })
 hl.bind(mainMod .. "+ R", hl.dsp.layout("colresize +conf"), { description = "Confirm column resize" })
