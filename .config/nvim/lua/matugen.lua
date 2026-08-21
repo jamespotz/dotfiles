@@ -2,9 +2,9 @@
 
 function M.setup()
   require('base16-colorscheme').setup({
-    base00 = '#141318',
-    base01 = '#201f25',
-    base02 = '#2a292f',
+    base00 = '#000000',
+    base01 = '#131318',
+    base02 = '#1d1c22',
     base03 = '#928f99',
     base04 = '#c9c5d0',
     base05 = '#e5e1e9',
@@ -24,17 +24,17 @@ function M.setup()
     vim.api.nvim_set_hl(0, group, opts)
   end
 
-  hi('TelescopeNormal',         { fg = '#e5e1e9',          bg = '#141318' })
-  hi('TelescopeBorder',         { fg = '#928f99',             bg = '#141318' })
-  hi('TelescopePromptNormal',   { fg = '#e5e1e9',          bg = '#141318' })
-  hi('TelescopePromptBorder',   { fg = '#928f99',             bg = '#141318' })
-  hi('TelescopePromptPrefix',   { fg = '#c7bfff',             bg = '#141318' })
-  hi('TelescopePromptCounter',  { fg = '#c9c5d0',  bg = '#141318' })
-  hi('TelescopePromptTitle',    { fg = '#141318',             bg = '#c7bfff' })
-  hi('TelescopePreviewTitle',   { fg = '#141318',             bg = '#c8c3dc' })
-  hi('TelescopeResultsTitle',   { fg = '#141318',             bg = '#ecb8ce' })
-  hi('TelescopeSelection',      { fg = '#e5e1e9',          bg = '#2a292f' })
-  hi('TelescopeSelectionCaret', { fg = '#c7bfff',             bg = '#2a292f' })
+  hi('TelescopeNormal',         { fg = '#e5e1e9',          bg = '#000000' })
+  hi('TelescopeBorder',         { fg = '#928f99',             bg = '#000000' })
+  hi('TelescopePromptNormal',   { fg = '#e5e1e9',          bg = '#000000' })
+  hi('TelescopePromptBorder',   { fg = '#928f99',             bg = '#000000' })
+  hi('TelescopePromptPrefix',   { fg = '#c7bfff',             bg = '#000000' })
+  hi('TelescopePromptCounter',  { fg = '#c9c5d0',  bg = '#000000' })
+  hi('TelescopePromptTitle',    { fg = '#000000',             bg = '#c7bfff' })
+  hi('TelescopePreviewTitle',   { fg = '#000000',             bg = '#c8c3dc' })
+  hi('TelescopeResultsTitle',   { fg = '#000000',             bg = '#ecb8ce' })
+  hi('TelescopeSelection',      { fg = '#e5e1e9',          bg = '#1d1c22' })
+  hi('TelescopeSelectionCaret', { fg = '#c7bfff',             bg = '#1d1c22' })
   hi('TelescopeMatching',       { fg = '#c7bfff',             bold = true })
 end
 

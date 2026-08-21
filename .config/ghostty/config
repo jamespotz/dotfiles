@@ -51,5 +51,4 @@ keybind = shift+enter=text:\n
 # Rando stuff
 gtk-single-instance = true
 
-# Dank color generation
 theme = noctalia
