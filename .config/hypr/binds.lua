@@ -77,15 +77,7 @@ end
 hl.bind(mainMod .. "+ ALT + space", cycle_layout, { description = "Cycle layout" })
 hl.bind(mainMod .. "+ R", hl.dsp.layout("colresize +conf"), { description = "Confirm column resize" })
 hl.bind(mainMod .. "+ F", hl.dsp.layout("fit_into_view"), { description = "Fit window into view" })
-
--- Screnshot
-hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd('grim -g "$(slurp -d)" - | wl-copy'),
-  { description = "Screenshot region to clipboard" })
-hl.bind("Print", hl.dsp.exec_cmd("grim - | wl-copy"),
-  { description = "Screenshot full screen to clipboard" })
-
 hl.bind(mainMod .. " +B", hl.dsp.exec_cmd("helium"), { description = "Open Helium browser" })
-hl.bind(mainMod .. " +ALT +B", hl.dsp.exec_cmd("flatpak run " .. browser), { description = "Open Zen browser" })
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(terminal), { description = "Open terminal" })
 hl.bind(mainMod .. " + Q", hl.dsp.window.close(), { description = "Close window" })
 hl.bind(mainMod .. " + M",
