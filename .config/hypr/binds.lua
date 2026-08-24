@@ -81,6 +81,8 @@ hl.bind(mainMod .. "+ F", hl.dsp.layout("fit_into_view"), { description = "Fit w
 -- Screnshot
 hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd('grim -g "$(slurp -d)" - | wl-copy'),
   { description = "Screenshot region to clipboard" })
+hl.bind("Print", hl.dsp.exec_cmd("grim - | wl-copy"),
+  { description = "Screenshot full screen to clipboard" })
 
 hl.bind(mainMod .. " +B", hl.dsp.exec_cmd("helium"), { description = "Open Helium browser" })
 hl.bind(mainMod .. " +ALT +B", hl.dsp.exec_cmd("flatpak run " .. browser), { description = "Open Zen browser" })
