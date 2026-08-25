@@ -106,7 +106,7 @@ end
 -- Example special workspace (scratchpad)
 hl.bind(mainMod .. " + ALT + S", hl.dsp.workspace.toggle_special("magic"),
   { description = "Toggle special workspace" })
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }),
+hl.bind(mainMod .. " + ALT + S", hl.dsp.window.move({ workspace = "special:magic" }),
   { description = "Move window to special workspace" })
 
 -- Scroll through existing workspaces with mainMod + scroll
