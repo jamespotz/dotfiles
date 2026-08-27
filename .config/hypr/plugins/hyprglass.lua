@@ -3,14 +3,10 @@ if hl.plugin.hyprglass then
     hg.config({
         enabled        = true,
         default_theme  = "dark",
-        default_preset = "apple",
+        default_preset = "glass",
         layers         = { enabled = true }
     })
 
-    -- Layer surfaces: each call whitelists the namespace and configures it
-    hg.layer("waybar", { preset = "subtle", mask_threshold = 0.05 })
-    hg.layer("swaync")
-    hg.layer("quickshell:bezel", { preset = "ui", mask_threshold = 0.3 })
     hg.layer("debug-panel", { exclude = true })
 
     hg.preset("clear", {
@@ -26,7 +22,7 @@ if hl.plugin.hyprglass then
         chromatic_aberration = 0.8,
         fresnel_strength = 0.8,
         edge_thickness = 0.08,
-        lens_distortion = 0.9,
+        lens_distortion = 0.8,
         brightness = 1.0,
         contrast = 1.7,
         saturation = 1,
