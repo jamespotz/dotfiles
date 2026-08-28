@@ -1,6 +1,6 @@
 -- Set programs that you use
 local terminal    = "ghostty"
-local fileManager = "nautilus"
+local fileManager = "ghostty -e yazi" --"nautilus"
 local browser     = "app.zen_browser.zen"
 
 local mainMod     = "SUPER" -- Sets "Windows" key as main modifier
