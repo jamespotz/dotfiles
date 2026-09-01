@@ -13,3 +13,6 @@ rust = "latest"
 java = "graalvm-community-25.0.2"
 lazygit = "latest"
 resvg = "latest"
+claude-code = "latest"
+codex = "latest"
+aws-cli = { version = "latest", symlink_bins = "true" }
