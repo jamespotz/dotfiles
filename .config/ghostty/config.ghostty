@@ -60,3 +60,4 @@ keybind = ctrl+shift+v=paste_from_clipboard
 
 # Quick terminal (global dropdown)
 keybind = global:ctrl+grave_accent=toggle_quick_terminal
+theme = noctalia
