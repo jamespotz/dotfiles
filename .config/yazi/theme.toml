@@ -9,22 +9,22 @@ marker_copied   = { fg = "#7fffaa", bg = "#7fffaa" }
 marker_cut      = { fg = "#ffb4ab", bg = "#ffb4ab" }
 marker_marked   = { fg = "#ffb4a9", bg = "#ffb4a9" }
 marker_selected = { fg = "#ffdf7f", bg = "#ffdf7f" }
-count_copied   = { fg = "#5f150e", bg = "#7fffaa" }
-count_cut      = { fg = "#5f150e", bg = "#ffb4ab" }
-count_selected = { fg = "#5f150e", bg = "#ffdf7f" }
-border_style  = { fg = "#919191" }
+count_copied   = { fg = "#561e17", bg = "#7fffaa" }
+count_cut      = { fg = "#561e17", bg = "#ffb4ab" }
+count_selected = { fg = "#561e17", bg = "#ffdf7f" }
+border_style  = { fg = "#a08c89" }
 
 [tabs]
-active   = { fg = "#5f150e", bg = "#ffb4a9", bold = true }
-inactive = { fg = "#c6c6c6", bg = "#2a2a2a" }
+active   = { fg = "#561e17", bg = "#ffb4a9", bold = true }
+inactive = { fg = "#d8c2be", bg = "#322826" }
 
 [mode]
-normal_main = { fg = "#5f150e", bg = "#ffb4a9", bold = true }
-normal_alt  = { fg = "#ffb4a9", bg = "#2a2a2a" }
-select_main = { fg = "#5f150e", bg = "#ffdf7f", bold = true }
-select_alt  = { fg = "#ffdf7f", bg = "#2a2a2a" }
-unset_main  = { fg = "#5f150e", bg = "#ffb4ab", bold = true }
-unset_alt   = { fg = "#ffb4ab", bg = "#2a2a2a" }
+normal_main = { fg = "#561e17", bg = "#ffb4a9", bold = true }
+normal_alt  = { fg = "#ffb4a9", bg = "#322826" }
+select_main = { fg = "#561e17", bg = "#ffdf7f", bold = true }
+select_alt  = { fg = "#ffdf7f", bg = "#322826" }
+unset_main  = { fg = "#561e17", bg = "#ffb4ab", bold = true }
+unset_alt   = { fg = "#ffb4ab", bg = "#322826" }
 
 [indicator]
 parent  = { reversed = true }
@@ -32,21 +32,21 @@ current = { reversed = true }
 preview = { underline = true }
 
 [status]
-perm_sep   = { fg = "#919191" }
+perm_sep   = { fg = "#a08c89" }
 perm_type  = { fg = "#ffb4a9" }
 perm_read  = { fg = "#7fffaa" }
 perm_write = { fg = "#ffdf7f" }
 perm_exec  = { fg = "#ffb4ab" }
 progress_label  = { bold = true }
-progress_normal = { fg = "#7fffaa", bg = "#2a2a2a" }
+progress_normal = { fg = "#7fffaa", bg = "#322826" }
 progress_error  = { fg = "#ffdf7f", bg = "#ffb4ab" }
 
 [which]
 border          = { fg = "#ffb4a9" }
 cand            = { fg = "#ffb4a9" }
-rest            = { fg = "#919191" }
+rest            = { fg = "#a08c89" }
 desc            = { fg = "#ffdf7f" }
-separator_style = { fg = "#919191" }
+separator_style = { fg = "#a08c89" }
 
 [confirm]
 border  = { fg = "#ffb4a9" }

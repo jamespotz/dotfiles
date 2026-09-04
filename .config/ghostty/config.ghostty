@@ -1,5 +1,5 @@
 # Defaults
-#theme = noctalia
+theme = helios
 font-family = 'GeistMono NFP SemiBold'
 font-family-bold = 'GeistMono NFP Bold'
 font-family-italic = 'GeistMono NFP Light'
@@ -60,4 +60,3 @@ keybind = ctrl+shift+v=paste_from_clipboard
 
 # Quick terminal (global dropdown)
 keybind = global:ctrl+grave_accent=toggle_quick_terminal
-theme = noctalia

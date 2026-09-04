@@ -21,8 +21,16 @@ hl.config({
     gaps_out = 5,
     border_size = 2,
     layout = "scrolling",
-  },
 
+    -- Set to true to enable click-and-drag border resizing
+    resize_on_border = true,
+
+    -- Extends the grab area (in pixels) outside the border
+    extend_border_grab_area = 15,
+
+    -- Changes your mouse cursor icon when hovering over the grab area
+    hover_icon_on_border = true,
+  },
 })
 
 hl.config({
