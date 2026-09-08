@@ -24,3 +24,12 @@ if hl.plugin.scrolloverview then
     hl.plugin.scrolloverview.overview("toggle all")
   end)
 end
+
+if hl.plugin.gloview then
+  hl.bind("SUPER + TAB", hl.plugin.gloview.toggle, { description = "Toggle Gloview" })
+  hl.bind("SUPER + SHIFT + TAB", hl.plugin.gloview.desktop, { description = "Toggle Gloview Desktop" })
+  hl.bind("SUPER + CTRL + TAB", hl.plugin.gloview.allworkspaces, { description = "Toogle Gloview All Workspace" })
+
+  hl.bind("SUPER + bracketright", hl.plugin.gloview.next, { description = "Gloview next" })
+  hl.bind("SUPER + bracketleft", hl.plugin.gloview.prev, { description = "Gloview previous" })
+end

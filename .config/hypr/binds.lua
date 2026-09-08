@@ -32,7 +32,7 @@ hl.bind(mainMod .. " + CTRL + minus", hl.dsp.window.resize({ x = 0, y = -10 }),
 hl.bind(mainMod .. " + W", hl.dsp.window.float({ action = "toggle" }), { description = "Toggle floating" })
 
 -- Toggle Tab
-hl.bind(mainMod .. " + Tab", hl.dsp.window.cycle_next(), { description = "Cycle to next window" })
+hl.bind(mainMod .. " + ALT + Tab", hl.dsp.window.cycle_next(), { description = "Cycle to next window" })
 
 -- Fullscreen and maximize
 hl.bind("ALT + f", hl.dsp.window.fullscreen(), { description = "Toggle fullscreen" })

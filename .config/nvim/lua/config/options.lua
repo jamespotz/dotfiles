@@ -4,3 +4,4 @@
 local opts = vim.opt
 
 opts.swapfile = false
+opts.autoread = true

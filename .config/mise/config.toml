@@ -17,3 +17,4 @@ claude-code = "latest"
 codex = "latest"
 aws-cli = { version = "latest", symlink_bins = "true" }
 tlrc = "latest"
+bob = "latest"
