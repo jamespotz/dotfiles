@@ -158,10 +158,12 @@ local function zoom(offset)
   hl.config({ cursor = { zoom_factor = current } })
 end
 
-hl.bind("SUPER + Z", zoom, { description = "Toggle Zoom" })
-hl.bind("SUPER + KP_ADD", function()
+hl.bind(mainMod .. "+ Z", zoom, { description = "Toggle Zoom" })
+hl.bind(mainMod .. "+ KP_ADD", function()
   zoom(0.5)
 end, { description = "Zoom +" })
-hl.bind("SUPER + KP_SUBTRACT", function()
+hl.bind(mainMod .. " + KP_SUBTRACT", function()
   zoom(-0.5)
 end, { description = "Zoom -" })
+
+hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("start-cam &"), { description = "Start camera" })

@@ -9,6 +9,9 @@ if hl.plugin.hyprglass then
 
   hg.layer("debug-panel", { exclude = true })
   hg.layer("selection", { exclude = true })
+  hg.layer("helios:keybinds", { exclude = true })
+  hg.layer("helios:launcher", { exclude = true })
+  hg.layer("helios:powermenu", { exclude = true })
 
   hg.preset("clear", {
     glass_opacity = 0.8,
