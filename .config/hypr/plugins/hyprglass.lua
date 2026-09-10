@@ -9,9 +9,11 @@ if hl.plugin.hyprglass then
 
   hg.layer("debug-panel", { exclude = true })
   hg.layer("selection", { exclude = true })
-  hg.layer("helios:keybinds", { exclude = true })
-  hg.layer("helios:launcher", { exclude = true })
-  hg.layer("helios:powermenu", { exclude = true })
+  hg.layer("helios:keybinds", { mask_mode = "alpha", mask_threshold = 0.3 })
+  hg.layer("helios:launcher", { mask_mode = "alpha", mask_threshold = 0.3 })
+  hg.layer("helios:powermenu", { mask_mode = "alpha", mask_threshold = 0.3 })
+  hg.layer("helios:bar", { mask_mode = "alpha", mask_threshold = 0.3 })
+  hg.layer("helios:settings", { mask_mode = "alpha", mask_threshold = 0.3 })
 
   hg.preset("clear", {
     glass_opacity = 0.8,
