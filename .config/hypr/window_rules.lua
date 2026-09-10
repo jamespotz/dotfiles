@@ -21,12 +21,6 @@ rule({
   float = true,
 })
 
-rule({
-  match = { class = "^(xdg-desktop-portal)$" },
-  float = true,
-  center = true,
-})
-
 
 local suppressMaximizeRule = rule({
   -- Ignore maximize requests from all apps. You'll probably like this.
@@ -118,6 +112,13 @@ local app_specs = {
     size = "1920 1080",
     extras = { { dim_around = true }, { immediate = true }, { opacity = 1 } },
   },
+  {
+    by = "class",
+    name = "xdg-desktop-portal|xdg-desktop-portal-gtk",
+    float = true,
+    center = true,
+    size = "800 600"
+  }
 }
 
 for _, s in ipairs(app_specs) do

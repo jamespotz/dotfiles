@@ -10,3 +10,5 @@ fish_variables
 .config/herdr/session.json
 
 **/.claude/settings.local.json
+apps/eventbus/serverless.yml
+apps/eventbus/.env
