@@ -33,6 +33,7 @@ hl.gesture({
 })
 
 utils.safe_load("modules/env")
+utils.safe_load("modules/autostart")
 utils.safe_load("modules/general")
 utils.safe_load("modules/input")
 utils.safe_load("modules/misc")
@@ -41,7 +42,6 @@ utils.safe_load("modules/binds")
 utils.safe_load("modules/window_rules")
 utils.safe_load("modules/layer_rules")
 utils.safe_load("modules/animations")
-utils.safe_load("modules/autostart")
 utils.safe_load("plugins/init")
 
 -- For Noctalia Color templates
