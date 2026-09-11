@@ -6,6 +6,9 @@ hl.monitor({
   mode = "3440x1440@144.00Hz",
   position = "0x0",
   scale = 1.25,
+  vrr = 3,
+  cm = "srgb",
+  bitdepth = 10
 })
 
 -----------------------
@@ -32,16 +35,16 @@ hl.gesture({
   action = "workspace"
 })
 
-utils.safe_load("modules/env")
-utils.safe_load("modules/autostart")
-utils.safe_load("modules/general")
-utils.safe_load("modules/input")
-utils.safe_load("modules/misc")
-utils.safe_load("modules/decorations")
-utils.safe_load("modules/binds")
-utils.safe_load("modules/window_rules")
-utils.safe_load("modules/layer_rules")
-utils.safe_load("modules/animations")
+require("modules.env")
+require("modules.autostart")
+require("modules.general")
+require("modules.input")
+require("modules.misc")
+require("modules.decorations")
+require("modules.binds")
+require("modules.window_rules")
+require("modules.layer_rules")
+require("modules.animations")
 utils.safe_load("plugins/init")
 
 -- For Noctalia Color templates
