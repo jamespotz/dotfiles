@@ -1,0 +1,203 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [ "$EUID" -ne 0 ]; then
+  echo "Root privileges are required."
+  echo "Re-running with sudo..."
+  exec sudo "$0" "$@"
+fi
+
+SERVER="localhost"
+
+SOURCE_BACKUP="${1:-}"
+DATABASE_NAME="${2:-RestoredDatabase}"
+
+SQLCMD="/opt/mssql-tools18/bin/sqlcmd"
+
+DATA_DIR="/var/opt/mssql/data"
+BACKUP_DIR="/var/opt/mssql/backup"
+
+if [ -z "$SOURCE_BACKUP" ]; then
+  echo "Usage:"
+  echo "  mssql-restore /path/to/database.bak DatabaseName"
+  exit 1
+fi
+
+if [ ! -f "$SOURCE_BACKUP" ]; then
+  echo "ERROR: Backup file does not exist:"
+  echo "  $SOURCE_BACKUP"
+  exit 1
+fi
+
+if [ ! -x "$SQLCMD" ]; then
+  SQLCMD="$(command -v sqlcmd || true)"
+fi
+
+if [ -z "$SQLCMD" ]; then
+  echo "ERROR: sqlcmd was not found."
+  exit 1
+fi
+
+# Ask for SQL Server credentials first
+read -rp "SQL Server admin username: " SQL_USER
+read -rsp "SQL Server password: " SQL_PASSWORD
+echo
+
+echo
+echo "Testing SQL Server login..."
+
+"$SQLCMD" \
+  -S "$SERVER" \
+  -U "$SQL_USER" \
+  -P "$SQL_PASSWORD" \
+  -C \
+  -Q "
+SET NOCOUNT ON;
+
+SELECT
+    SUSER_SNAME() AS LoginName,
+    IS_SRVROLEMEMBER('sysadmin') AS IsSysAdmin;
+" >/dev/null
+
+echo "Login successful."
+
+# Create backup directory
+echo
+echo "Checking backup directory..."
+
+mkdir -p "$BACKUP_DIR"
+chown mssql:mssql "$BACKUP_DIR"
+chmod 750 "$BACKUP_DIR"
+
+echo "Backup directory ready:"
+echo "  $BACKUP_DIR"
+
+# Preserve original backup filename
+BACKUP_NAME="$(basename "$SOURCE_BACKUP")"
+BACKUP_FILE="$BACKUP_DIR/$BACKUP_NAME"
+
+echo
+echo "Moving backup file..."
+echo "  From: $SOURCE_BACKUP"
+echo "  To:   $BACKUP_FILE"
+
+if [ "$SOURCE_BACKUP" != "$BACKUP_FILE" ]; then
+  mv "$SOURCE_BACKUP" "$BACKUP_FILE"
+fi
+
+chown mssql:mssql "$BACKUP_FILE"
+chmod 640 "$BACKUP_FILE"
+
+echo "Backup moved successfully."
+
+echo
+echo "SQL Server:  $SERVER"
+echo "User:        $SQL_USER"
+echo "Backup:      $BACKUP_FILE"
+echo "Database:    $DATABASE_NAME"
+
+# Read logical file names
+echo
+echo "Reading backup file information..."
+
+FILELIST=$(
+  "$SQLCMD" \
+    -S "$SERVER" \
+    -U "$SQL_USER" \
+    -P "$SQL_PASSWORD" \
+    -C \
+    -h -1 \
+    -W \
+    -s "|" \
+    -Q "
+SET NOCOUNT ON;
+
+RESTORE FILELISTONLY
+FROM DISK = N'$BACKUP_FILE';
+"
+)
+
+DATA_LOGICAL_NAME=$(
+  echo "$FILELIST" |
+    awk -F'|' '$3 == "D" {
+        gsub(/^ +| +$/, "", $1);
+        print $1;
+        exit
+    }'
+)
+
+LOG_LOGICAL_NAME=$(
+  echo "$FILELIST" |
+    awk -F'|' '$3 == "L" {
+        gsub(/^ +| +$/, "", $1);
+        print $1;
+        exit
+    }'
+)
+
+if [ -z "$DATA_LOGICAL_NAME" ] || [ -z "$LOG_LOGICAL_NAME" ]; then
+  echo "ERROR: Could not determine logical database file names."
+  exit 1
+fi
+
+MDF_FILE="$DATA_DIR/$DATABASE_NAME.mdf"
+LDF_FILE="$DATA_DIR/${DATABASE_NAME}_log.ldf"
+
+echo "Data logical name: $DATA_LOGICAL_NAME"
+echo "Log logical name:  $LOG_LOGICAL_NAME"
+
+echo
+echo "Restoring database..."
+
+"$SQLCMD" \
+  -S "$SERVER" \
+  -U "$SQL_USER" \
+  -P "$SQL_PASSWORD" \
+  -C \
+  -Q "
+IF DB_ID(N'$DATABASE_NAME') IS NOT NULL
+BEGIN
+    ALTER DATABASE [$DATABASE_NAME]
+        SET SINGLE_USER
+        WITH ROLLBACK IMMEDIATE;
+END;
+
+RESTORE DATABASE [$DATABASE_NAME]
+FROM DISK = N'$BACKUP_FILE'
+WITH
+    MOVE N'$DATA_LOGICAL_NAME'
+        TO N'$MDF_FILE',
+
+    MOVE N'$LOG_LOGICAL_NAME'
+        TO N'$LDF_FILE',
+
+    REPLACE,
+    RECOVERY,
+    STATS = 10;
+
+ALTER DATABASE [$DATABASE_NAME]
+    SET MULTI_USER;
+"
+
+echo
+echo "Verifying database..."
+
+"$SQLCMD" \
+  -S "$SERVER" \
+  -U "$SQL_USER" \
+  -P "$SQL_PASSWORD" \
+  -C \
+  -Q "
+SELECT
+    name,
+    state_desc,
+    recovery_model_desc
+FROM sys.databases
+WHERE name = N'$DATABASE_NAME';
+"
+
+echo
+echo "Restore completed successfully."
+echo "Backup:"
+echo "  $BACKUP_FILE"
