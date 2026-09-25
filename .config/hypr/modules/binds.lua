@@ -1,13 +1,13 @@
 -- Is uwsm
 local is_uwsm     = os.getenv('UWSM_FINALIZE_VARNAMES')
-local run_app     = is_uwsm and "uwsm --app " or ""
+local run_app     = is_uwsm and "uwsm app -- " or ""
 
 -- Set programs that you use
 local terminal    = "ghostty"
-local fileManager = "kitty -e yazi"   --"nautilus"
-local browser     = "helium"          --"app.zen_browser.zen"
+local fileManager = "nautilus" --"kitty -e yazi"
+local browser     = "helium"   --"app.zen_browser.zen"
 
-local mainMod     = "SUPER"           -- Sets "Windows" key as main modifier
+local mainMod     = "SUPER"    -- Sets "Windows" key as main modifier
 
 hl.bind(mainMod .. " + ALT + r",
   hl.dsp.exec_cmd("hyprctl reload | notify-send '🗱 Hyprland Reloaded!'"), { description = "Reload Hyprland" })
