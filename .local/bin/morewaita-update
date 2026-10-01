@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+REPO_URL="https://github.com/somepaulo/MoreWaita.git"
+INSTALL_DIR="$HOME/MoreWaita"
+
+if [ ! -d "$INSTALL_DIR/.git" ]; then
+  echo "MoreWaita is not installed yet."
+  echo "Cloning repository..."
+
+  mkdir -p "$(dirname "$INSTALL_DIR")"
+  git clone "$REPO_URL" "$INSTALL_DIR"
+
+  cd "$INSTALL_DIR"
+
+  echo "Installing MoreWaita..."
+  sudo ./install.sh
+
+  echo "MoreWaita installation complete."
+  exit 0
+fi
+
+cd "$INSTALL_DIR"
+
+echo "Checking MoreWaita for updates..."
+
+git fetch origin
+
+LOCAL_COMMIT="$(git rev-parse HEAD)"
+REMOTE_COMMIT="$(git rev-parse '@{u}')"
+
+if [ "$LOCAL_COMMIT" = "$REMOTE_COMMIT" ]; then
+  echo "MoreWaita is already up to date."
+  exit 0
+fi
+
+echo "Update found."
+echo "Updating MoreWaita..."
+
+git pull --ff-only
+
+echo "Installing updated icons..."
+sudo ./install.sh
+
+echo "MoreWaita has been updated successfully."
