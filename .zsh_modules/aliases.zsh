@@ -1,0 +1,8 @@
+alias ls='eza --icons --group-directories-first'
+alias ll='eza -l --icons --git --group-directories-first'
+alias lt='eza --tree --icons'
+alias rm='rm -I --preserve-root'
+alias cp='cp -i'
+alias mv='mv -i'
+alias mkdir='mkdir -p'
+alias update='sudo dnf update'

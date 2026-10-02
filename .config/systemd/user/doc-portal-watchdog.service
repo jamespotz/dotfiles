@@ -1,0 +1,6 @@
+[Unit]
+Description=Restart xdg-document-portal if its FUSE mount is missing
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'systemctl --user is-active -q xdg-document-portal.service && ! mountpoint -q "%t/doc" && systemctl --user restart xdg-document-portal.service || true'
