@@ -84,9 +84,6 @@ hl.bind(mainMod .. "+ F", hl.dsp.layout("fit_into_view"), { description = "Fit w
 hl.bind(mainMod .. " +B", hl.dsp.exec_cmd(run_app .. browser), { description = "Open browser" })
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(run_app .. terminal), { description = "Open terminal" })
 hl.bind(mainMod .. " + Q", hl.dsp.window.close(), { description = "Close window" })
-hl.bind(mainMod .. " + M",
-  hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"),
-  { description = "Shutdown / exit Hyprland" })
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(run_app .. fileManager), { description = "Open file manager" })
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo(), { description = "Toggle pseudotile" })
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"), { description = "Toggle split (dwindle only)" })
