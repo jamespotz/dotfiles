@@ -12,3 +12,4 @@ fish_variables
 **/.claude/settings.local.json
 apps/eventbus/serverless.yml
 apps/eventbus/.env
+.zsh_modules/plugins
