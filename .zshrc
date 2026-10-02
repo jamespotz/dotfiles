@@ -56,3 +56,9 @@ ZDOTMODULES="${ZDOTDIR:-$HOME}/.zsh_modules"
 source "${ZDOTMODULES}/aliases.zsh"
 source "${ZDOTMODULES}/plugins.zsh"
 source "${ZDOTMODULES}/prompt.zsh"
+
+# =========================================================
+# Custom configs
+# =========================================================
+source "${ZDOTDIR:-$HOME}/.custom.zsh"
+
