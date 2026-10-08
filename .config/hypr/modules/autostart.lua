@@ -23,5 +23,5 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("awww-daemon &")
   hl.exec_cmd("mpris-proxy")
 
-  hl.exec_cmd("sh ~/.config/hypr/helios-reload.sh &")
+  hl.exec_cmd("uwsm app -t scope -- sh ~/.config/hypr/helios-reload.sh &")
 end)
