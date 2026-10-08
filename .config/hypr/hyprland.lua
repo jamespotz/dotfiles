@@ -37,6 +37,7 @@ hl.gesture({
 
 require("modules.env")
 require("modules.autostart")
+require("modules.exec")
 require("modules.general")
 require("modules.input")
 require("modules.misc")

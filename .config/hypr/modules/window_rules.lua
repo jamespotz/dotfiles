@@ -73,9 +73,7 @@ hl.window_rule({
 })
 
 local float_titles = {
-  "Open File", "Picture-in-Picture",
-  "_crx_nngceckbapebfimnlniiiahkandclblb",
-  "gopeed", "Picture in picture"
+  "Open File", "gopeed"
 }
 
 for _, t in ipairs(float_titles) do
