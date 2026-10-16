@@ -5,7 +5,7 @@ local run_app     = is_uwsm and "uwsm app -- " or ""
 -- Set programs that you use
 local terminal    = "ghostty"
 local fileManager = "nautilus" --"kitty -e yazi"
-local browser     = "helium"   --"app.zen_browser.zen"
+local browser     = "vivaldi"  --"app.zen_browser.zen"
 
 local mainMod     = "SUPER"    -- Sets "Windows" key as main modifier
 

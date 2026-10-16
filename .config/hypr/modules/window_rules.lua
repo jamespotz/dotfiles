@@ -104,7 +104,9 @@ local app_specs = {
   { by = "title", name = "Bitwarden", float = true, center = true, size = "920 780" },
   {
     by = "title",
-    name = "Minecraft.*|Prominence.*",
+    -- Game windows only ("Minecraft* 1.20.1"); a bare "Minecraft.*" also
+    -- caught browser tabs like "Minecraft Modpacks - CurseForge".
+    name = "Minecraft\\*? [0-9].*|Prominence.*",
     float = true,
     center = true,
     size = "1920 1080",
