@@ -62,3 +62,5 @@ source "${ZDOTMODULES}/prompt.zsh"
 # =========================================================
 source "${ZDOTDIR:-$HOME}/.custom.zsh"
 
+
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"

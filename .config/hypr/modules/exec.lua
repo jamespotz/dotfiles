@@ -10,6 +10,7 @@ local function apply_resizer_rules(win)
   fn.resizer(win, "^Extension: %(Bitwarden Password Manager%) %- Bitwarden", 20, 54, float_center, false) -- Firefox
   fn.resizer(win, "nngceckbapebfimnlniiiahkandclblb", 20, 54, float_center, true, "class")                -- Chromium
   fn.resizer(win, "Picture[- ]in[- ][Pp]icture", 0, 0, pip_actions, false)
+  fn.resizer(win, "^Bitwarden.*$", 20, 54, float_center, false)
 end
 
 hl.on("window.title", apply_resizer_rules)
