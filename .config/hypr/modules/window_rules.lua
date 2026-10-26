@@ -113,6 +113,13 @@ local app_specs = {
     extras = { { dim_around = true }, { immediate = true }, { opacity = 1 } },
   },
   {
+    -- Steam/Proton games: keep focus when the cursor leaves the window,
+    -- XWayland pointer grabs don't confine the mouse.
+    by = "class",
+    name = "steam_app_.*",
+    extras = { { stay_focused = true }, { immediate = true } },
+  },
+  {
     by = "class",
     name = "xdg-desktop-portal|xdg-desktop-portal-gtk",
     float = true,
