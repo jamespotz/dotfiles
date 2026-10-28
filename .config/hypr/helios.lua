@@ -5,9 +5,17 @@ local inactive = "rgb(1A0B33)"
 local locked = "rgb(FF3864)"
 local text_active = "rgb(0D0221)"
 local text_inactive = "rgb(F5E9FF)"
+local glow = "rgba(FFB000EE)"
+local glow_inactive = "rgba(1A0B33EE)"
 
 local function apply_theme()
     hl.config({
+        decoration = {
+            glow = {
+                color = glow,
+                color_inactive = glow_inactive,
+            },
+        },
         general = {
             col = {
                 active_border = active,
