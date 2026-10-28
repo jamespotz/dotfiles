@@ -1,13 +1,9 @@
--- Is uwsm
-local is_uwsm = os.getenv('UWSM_FINALIZE_VARNAMES')
-local run_app = is_uwsm and "uwsm app -- " or ""
-
 -- Set programs that you use
 -- local terminal    = "ghostty"
 -- local fileManager = "nautilus" --"kitty -e yazi"
 -- local browser     = "vivaldi"  --"app.zen_browser.zen"
 
-local mainMod = "SUPER"     -- Sets "Windows" key as main modifier
+local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
 hl.bind(mainMod .. " + ALT + r",
   hl.dsp.exec_cmd("hyprctl reload | notify-send '🗱 Hyprland Reloaded!'"), { description = "Reload Hyprland" })
@@ -81,10 +77,7 @@ end
 hl.bind(mainMod .. "+ ALT + space", cycle_layout, { description = "Cycle layout" })
 hl.bind(mainMod .. "+ R", hl.dsp.layout("colresize +conf"), { description = "Confirm column resize" })
 hl.bind(mainMod .. "+ F", hl.dsp.layout("fit_into_view"), { description = "Fit window into view" })
--- hl.bind(mainMod .. " +B", hl.dsp.exec_cmd(run_app .. browser), { description = "Open browser" })
--- hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(run_app .. terminal), { description = "Open terminal" })
 hl.bind(mainMod .. " + Q", hl.dsp.window.close(), { description = "Close window" })
--- hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(run_app .. fileManager), { description = "Open file manager" })
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo(), { description = "Toggle pseudotile" })
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"), { description = "Toggle split (dwindle only)" })
 
