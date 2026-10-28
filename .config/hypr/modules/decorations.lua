@@ -2,8 +2,8 @@ hl.config({
   decoration = {
     rounding = 16,
     rounding_power = 2,
-    active_opacity = 0.95, -- blur variants only show through transparency
-    inactive_opacity = 0.89,
+    active_opacity = 0.95,
+    inactive_opacity = 0.85,
 
     shadow = {
       enabled = true,
@@ -14,15 +14,17 @@ hl.config({
 
     blur = {
       enabled = true,
-      size = 4,
+
+      brightness = 0.8,
+      contrast = 2,
+      noise = 0,
+      vibrancy = 0.35,
+      vibrancy_darkness = 0.35,
+
       passes = 2,
-      new_optimizations = true,
-      ignore_opacity = true,
-      xray = false,
-      noise = 0.0,
-      contrast = 1.0,
-      brightness = 1.05,
-      popups = true,
+      size = 10,
+
+      special = false,
 
       -- kawase | frost | ripple | drops | water | fluid_jar | prism | heat_shimmer | acrylic | aurora | haze
       -- Only the selected variant's block below is used; the rest are Hyprland defaults unless tuned.
